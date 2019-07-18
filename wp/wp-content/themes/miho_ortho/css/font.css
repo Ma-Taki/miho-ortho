@@ -1,0 +1,12 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family:APJapanesefont;
+  src: url("../font/APJapanesefont.eot");/*For IE*/
+  src: url("../font/APJapanesefont.woff") format("woff"),/*For Modern browser*/
+  url("../font/APJapanesefont.ttf") format("truetype");/*For iOS Android*/
+}
+
+.anzu{font-family:APJapanesefont;}
+
+.gf01{font-family: 'Quicksand', sans-serif;}
