@@ -1,7 +1,7 @@
 <!-- #footContent -->
 <div id="footContent" class="bgTooth">
 	<div class="wrap">
-		<h2>当院は予約制です。お手数ですが診療をご希望の場合はお電話または<a href="<?php echo esc_url( home_url( '/' ) ); ?>reservation/">予約フォーム</a>からご予約くださいませ。</h2>
+		<h2>当院は予約制です。お手数ですが診療をご希望の場合はお電話または<a href="<?php echo esc_url( home_url( '/' ) ); ?>reservation/">予約フォーム</a>またはLINEからご予約くださいませ。</h2>
 			<?php
 				$posts = new WP_Query( array(
 						'post_type' => 'information',
@@ -11,9 +11,9 @@
 				if ( have_posts() ) : while ( $posts->have_posts() ) : $posts->the_post();
 			?>
 			<p class="tel"><a href="tel:<?php $cf_sample = SCF::get('tel'); echo $cf_sample;?>"><?php $cf_sample = SCF::get('tel'); echo $cf_sample;?></a></p>
-		
+
 			<div class="inr inrTop">
-				
+
 				<div class="alignleft calender">
 					<div class="calenderInr">
 						<?php
@@ -29,13 +29,13 @@
 					</div>
 					<p>■ … 休診日</p>
 				</div>
-		
+
 				<div class="alignright">
 					<?php
 						$cf_sample = SCF::get('time');
 						echo $cf_sample;
 					?>
-					
+
 					<dl>
 						<dt>最終受付</dt>
 						<dd>
@@ -63,11 +63,11 @@
 					</dl>
 				</div>
 			</div>
-			
-			
+
+
 			<div class="inr inrBtm">
 				<div class="alignleft">
-					<?php 
+					<?php
 					 $img = get_post_meta($post->ID, 'map', true);
 					?>
 					<img src="<?php echo wp_get_attachment_url($img) ?>">
@@ -78,7 +78,7 @@
 						?>" target="_blank">Google mapを開く</a>
 					</p>
 				</div>
-				
+
 				<div class="alignright">
 					<p class="add">
 						<?php
@@ -104,7 +104,7 @@
 					</ul>
 				</div>
 			</div>
-						
+
 			<?php endwhile; endif; wp_reset_query(); ?>
 		</div>
 	</div>
