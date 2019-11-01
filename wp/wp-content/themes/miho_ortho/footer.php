@@ -1,7 +1,7 @@
 <!-- #footContent -->
 <div id="footContent" class="bgTooth">
 	<div class="wrap">
-		<h2>当院は予約制です。お手数ですが診療をご希望の場合はお電話または<a href="<?php echo esc_url( home_url( '/' ) ); ?>reservation/">予約フォーム</a>もしくはLINEからご予約くださいませ。</h2>
+		<h2>当院は予約制です。お手数ですが診療をご希望の場合はお電話または<a href="<?php echo esc_url( home_url( '/' ) ); ?>reservation/">予約フォーム</a>もしくは<a href="<?php echo esc_url( home_url( '/' ) ); ?>reservation/">LINE</a>からご予約くださいませ。</h2>
 			<?php
 				$posts = new WP_Query( array(
 						'post_type' => 'information',
