@@ -23,7 +23,7 @@ class TypeSquare_Admin extends TypeSquare_Admin_Base {
 		add_action( 'admin_menu',		array( $this, 'typesquare_setting_menu' ) );
 		add_action( 'admin_menu',		array( $root, 'typesquare_post_metabox' ) );
 		add_action( 'admin_init',		array( $this, 'typesquare_admin_init' ) );
-		add_action( 'admin_notices',        array( $this, 'typesquare_admin_init_notices' ) );
+		add_action( 'admin_notices',		array( $this, 'typesquare_admin_init_notices' ) );
 		add_action( 'admin_notices', array( $root, 'typesquare_admin_notices' ) );
 		add_action( 'save_post',		 array( $root, 'typesquare_save_post' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_theme_style' ) );
@@ -32,6 +32,7 @@ class TypeSquare_Admin extends TypeSquare_Admin_Base {
 	public function admin_theme_style() {
 		wp_enqueue_style( 'ts-styles',  path_join( TS_PLUGIN_URL, 'inc/assets/css/admin.css' ) );
 		wp_enqueue_style( 'ts-common',  path_join( TS_PLUGIN_URL, 'inc/assets/css/common.css' ) );
+		wp_enqueue_style( 'ts-font',  path_join( TS_PLUGIN_URL, 'inc/assets/css/font.css' ) );
 	}
 
 	public function admin_theme_script( $position = false ) {
@@ -40,11 +41,10 @@ class TypeSquare_Admin extends TypeSquare_Admin_Base {
 
 	public function typesquare_setting_menu() {
 		$root = TypeSquare_Admin_Root::get_instance();
-		$theme = TypeSquare_Admin_Fonttheme::get_instance();
 		$hooks = array(
 			add_menu_page(
-				__( 'TypeSquare Webfonts', self::$text_domain ),
-				__( 'TypeSquare Webfonts', self::$text_domain ),
+				__( 'TS Webfonts for SAKURA RS', self::$text_domain ),
+				__( 'TS Webfonts for SAKURA RS', self::$text_domain ),
 				'administrator',
 				self::MENU_ID,
 				array( $root, 'typesquare_admin_menu' )
@@ -57,31 +57,77 @@ class TypeSquare_Admin extends TypeSquare_Admin_Base {
 	}
 
 	public function typesquare_admin_init() {
+		if ( isset( $_POST['update_font_list'] ) && $_POST['update_font_list'] === 'on') {
+			$api = TypeSquare_ST_Api::get_instance();
+			$api->update_font_list();
+			return;
+		}
+
 		if ( isset( $_POST[ self::MENU_ID ] ) && $_POST[ self::MENU_ID ] ) {
 			$nonce_key = TypeSquare_ST::OPTION_NAME;
 			if ( isset( $_POST['typesquare_auth'] ) && $_POST['typesquare_auth'] ) {
 				if ( check_admin_referer( $nonce_key , self::MENU_ID ) ) {
 					$auth = TypeSquare_ST_Auth::get_instance();
-					$auth_result = $auth->auth( $_POST['typesquare_auth'] );
-					if ( !($auth_result['auth_status']) ) {
-						$msg = __( 'ログインに失敗しました。メールアドレスとパスワード、配信IDをご確認の上再度お試しください。' , self::$text_domain );
-						$result = new WP_Error( 'TypeSquare Login Error', $msg );
-						$this->set_error_messages( $result );
+					$param = $auth->get_auth_status();
+					if (empty($param['typesquare_id'])) {
+						$api = TypeSquare_ST_Api::get_instance();
+						$api->update_font_list();
 					}
-					$escaped_data = $auth->result_escape( $auth_result );
-					update_option( 'typesquare_auth', $escaped_data );
+					$auth->update_typesquare_auth();
 				}
-			} elseif ( isset( $_POST['typesquare_fonttheme'] ) && $_POST['typesquare_fonttheme'] ) {
-				if ( check_admin_referer( $nonce_key , self::MENU_ID ) ) {
-					$fonts = TypeSquare_ST_Fonts::get_instance();
-					$fonts->update_font_theme_setting();
+				if ( isset( $_POST['typesquare_fonttheme'] ) && $_POST['typesquare_fonttheme'] ) {
+					if ( check_admin_referer( $nonce_key , self::MENU_ID ) ) {
+						$fonts = TypeSquare_ST_Fonts::get_instance();
+						$fonts->update_typesquare_settings();
+					}
 				}
 			}
 			wp_safe_redirect( menu_page_url( self::MENU_ID , false ) );
-		} elseif ( isset( $_POST['ts_update_font_settings'] ) && $_POST['ts_update_font_settings'] ) {
-			if ( check_admin_referer( 'ts_update_font_settings', 'ts_update_font_settings' ) ) {
+		} elseif ( isset( $_POST['ts_update_site_font_settings'] ) && $_POST['ts_update_site_font_settings'] ) {
+			if ( check_admin_referer( 'ts_update_site_font_settings', 'ts_update_site_font_settings' ) ) {
 				$fonts = TypeSquare_ST_Fonts::get_instance();
-				$fonts->update_font_theme_setting();
+				$fonts->update_site_font_setting();
+			}
+		}
+
+		if (isset($_POST['fontThemeUseType'])) {
+			$auth = TypeSquare_ST_Auth::get_instance();
+			$auth->update_typesquare_auth();
+			if ($_POST['fontThemeUseType'] == 1) {
+				if (isset($_POST['ts_update_font_settings']) && $_POST['ts_update_font_settings']) {
+					$fonts = TypeSquare_ST_Fonts::get_instance();
+					$fonts->disable_font_theme_setting();
+					$fonts->update_show_post_form('false');
+				}
+			} else if ($_POST['fontThemeUseType'] == 2) {
+				if (isset($_POST['ts_update_font_settings']) && $_POST['ts_update_font_settings']) {
+					if (check_admin_referer('ts_update_font_settings', 'ts_update_font_settings')) {
+						$fonts = TypeSquare_ST_Fonts::get_instance();
+						$fonts->update_font_theme_setting();
+						$fonts->update_show_post_form('false');
+					}
+				}
+			} else if ($_POST['fontThemeUseType'] == 3) {
+				$fonts = TypeSquare_ST_Fonts::get_instance();
+				$fonts->disable_font_theme_setting();
+				$fonts->update_show_post_form('true');
+			} else if ($_POST['fontThemeUseType'] == 4) {
+				if (isset($_POST['ts_update_font_pro_settings']) && $_POST['ts_update_font_pro_settings']) {
+					if (check_admin_referer('ts_update_font_pro_settings', 'ts_update_font_pro_settings')) {
+						$fonts = TypeSquare_ST_Fonts::get_instance();
+						$fonts->update_font_pro_setting();
+						$fonts->update_show_post_form('false');
+					}
+				}
+			}
+		}
+
+		if (!file_exists(path_join( TS_PLUGIN_PATH, 'inc/assets/css/font.css' ))) {
+			$auth = TypeSquare_ST_Auth::get_instance();
+			$param = $auth->get_auth_status();
+			if (!empty($param['typesquare_id'])) {
+				$api = TypeSquare_ST_Api::get_instance();
+				$api->update_font_list();
 			}
 		}
 	}

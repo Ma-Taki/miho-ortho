@@ -24,6 +24,7 @@ $paypal_svg = '
         margin: 5px 0 5px -5px;
         clear: both;
         overflow: hidden;
+        font-size: 14px;
     }
 
     .alti_promote_plugin a {
@@ -102,8 +103,8 @@ $paypal_svg = '
     <div class="alti-watermark-sidebar">
         <div class="alti_promote_widget">
             <div class="alti_promote_title">Like this plugin?</div>
-            <p><span class="dashicons dashicons-arrow-right-alt2"></span><a target="_blank" class="alti_promote_btn" href="https://wordpress.org/support/view/plugin-reviews/<?php echo $get_from; ?>?rate=5#postform"><strong>Rate it</strong></a> to show your support!</p>
-            <p><span class="dashicons dashicons-arrow-right-alt2"></span><a target="_blank" class="alti_promote_btn" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9S74KTRCZCLRE&item_name=<?php echo $get_from; ?>&no_note=0&no_shipping=1&currency_code=USD"><strong>Donate</strong> <span class="alti_promote_paypal_svg"><?php echo $paypal_svg; ?></span></a> to encourage me updating this plugin!</p>
+            <p><a target="_blank" class="alti_promote_btn" href="https://wordpress.org/support/view/plugin-reviews/<?php echo $get_from; ?>?rate=5#postform"><strong>Rate it</strong></a> to show your support!</p>
+            <p><a target="_blank" class="alti_promote_btn" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9S74KTRCZCLRE&item_name=<?php echo $get_from; ?>&no_note=0&no_shipping=1&currency_code=USD"><strong>Donate</strong> <span class="alti_promote_paypal_svg"><?php echo $paypal_svg; ?></span></a> to encourage me updating this plugin!</p>
         </div>
         <div class="alti_promote_widget">
             <div class="alti_promote_title">Discover more useful plugins</div>
@@ -127,7 +128,7 @@ $paypal_svg = '
             <?php foreach ($related_plugins as $related_plugin): ?>
             <?php if( $related_plugin[0] != $get_from ) { ?>
             <div class="alti_promote_plugin">
-                <a href="plugin-install.php?tab=search&type=term&s=alticreation+<?php echo urlencode($related_plugin[0]); ?>" title="<?php echo $related_plugin[1]; ?>"><img src="https://plugins.svn.wordpress.org/<?php echo $related_plugin[0]; ?>/assets/icon-128x128.png" alt="<?php echo $related_plugin[1]; ?>">
+                <a href="plugin-install.php?tab=search&type=term&s=<?php echo urlencode($related_plugin[0]); ?>" title="<?php echo $related_plugin[1]; ?>"><img src="https://plugins.svn.wordpress.org/<?php echo $related_plugin[0]; ?>/assets/icon-128x128.png" alt="<?php echo $related_plugin[1]; ?>">
                 <div class="alti_promote_copy">
                     <strong><?php echo $related_plugin[1]; ?></strong>
                     <?php echo $related_plugin[2]; ?>
@@ -139,6 +140,6 @@ $paypal_svg = '
         </div>
         <div class="alti_promote_widget">
             <div class="alti_promote_title">Developed by</div>
-            <a href="http://www.alticreation.com?utm_source=wp_plugin&utm_medium=logo_sidebar&utm_campaign=<?php echo $get_from; ?>"><img src="http://alticreation.com/logos/alticreation_color_01.png" alt="alticreation"></a>
+            <a href="https://www.alticreation.com?utm_source=wp_plugin&utm_medium=logo_sidebar&utm_campaign=<?php echo $get_from; ?>"><img src="http://alticreation.com/logos/alticreation_color_01.png" alt="alticreation"></a>
         </div>
     </div>

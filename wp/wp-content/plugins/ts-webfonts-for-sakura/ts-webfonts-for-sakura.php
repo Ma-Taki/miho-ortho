@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: TS Webfonts for SAKURA RS
-Version: 2.0.0
-Description: さくらのレンタルサーバで株式会社モリサワ提供のWebフォント30書体が無料で利用できるプラグインです。
+Version: 3.0.0
+Description: さくらのレンタルサーバで株式会社モリサワ提供のWebフォント33書体が無料で利用できるプラグインです。
 Author: SAKURA Internet Inc.
 Author URI: http://www.sakura.ne.jp/
-Plugin URI: https://help.sakura.ad.jp/app/answers/detail/a_id/2600
+Plugin URI: https://help.sakura.ad.jp/360000210142/
 Text Domain: ts-webfonts-for-sakura
 Domain Path: /languages
 */
@@ -13,6 +13,7 @@ Domain Path: /languages
 require_once( dirname( __FILE__ ).'/typesquare-admin.php' );
 require_once( dirname( __FILE__ ).'/inc/class/class.font.data.php' );
 require_once( dirname( __FILE__ ).'/inc/class/class.auth.php' );
+require_once( dirname( __FILE__ ).'/inc/class/class.api.php' );
 define( 'TS_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 $ts = TypeSquare_ST::get_instance();
@@ -62,17 +63,48 @@ class TypeSquare_ST {
 
 	public function load_scripts() {
 		$query = '';
+		$uid = str_replace( '%', '%25', $this->get_user_id() );
 		$version = $this->version();
+		$fonts = TypeSquare_ST_Fonts::get_instance();
+		$fade_in = $fonts->get_fadein_time();
+		$auto_load_font = $fonts->get_auto_load_font();
+		$apply_to_pseudo = $fonts->get_apply_to_pseudo();
+		$apply_to_hidden = $fonts->get_apply_to_hidden();
+
+		if ( false !== $fade_in ) {
+			$query .= "&fadein={$fade_in}";
+		} else {
+			$query .= "&fadein=-1";
+		}
+
+		if ( false !== $auto_load_font ) {
+			$query .= "&auto_load_font=true";
+		}
+
+		if ( false === $apply_to_pseudo ) {
+			$query .= "&apply_to_pseudo=false";
+		}
+
+		if ( false !== $apply_to_hidden ) {
+			$query .= "&apply_to_hidden=true";
+		}
 
 		if ( false !== $uid ) {
-			wp_register_script( 'typesquare_std', "//webfonts.sakura.ne.jp/js/sakura.js?$query", array( 'jquery' ), $version, false );
+			wp_register_script( 'typesquare_std', "//webfonts.sakura.ne.jp/js/sakurav2.js?$query", array( 'jquery' ), $version, false );
 			wp_enqueue_script( 'typesquare_std' );
 		}
+	}
+
+	private function get_user_id() {
+		$auth  = TypeSquare_ST_Auth::get_instance();
+		$param = $auth->get_auth_status();
+		return $param['typesquare_id'];
 	}
 
 	private function get_fonts( $type = false, $post_font_data = false, $fonts = false ) {
 		$font_class = TypeSquare_ST_Fonts::get_instance();
 		$selected_font = $font_class->get_selected_font( $type );
+
 		if ( $selected_font ) {
 			$fonts = $selected_font;
 		}
@@ -103,25 +135,39 @@ class TypeSquare_ST {
 			return;
 		}
 		$auth  = TypeSquare_ST_Auth::get_instance();
-
-		$fonts = TypeSquare_ST_Fonts::get_instance();
-		$fonttheme = $fonts->get_selected_fonttheme();
-		if ( ! isset( $fonttheme ) && ! $fonttheme ) {
+		$param = $auth->get_auth_status();
+		if ( '' === $param['typesquare_id'] ) {
 			return;
 		}
-		$use_font = $fonts->load_font_data( $fonttheme['font_theme'] );
-		if ( is_singular() ) {
-			$param = $fonts->get_fonttheme_params();
-			if ( isset( $param['typesquare_themes']['show_post_form'] ) && 'false' != $param['typesquare_themes']['show_post_form']  ) {
-				$post_theme = $fonts->get_selected_post_fonttheme( get_the_ID() );
-				$post_theme = $fonts->load_font_data( $post_theme );
-				if ( $post_theme ) {
-					$use_font = $post_theme;
-				}
-			}
+
+		$site_style = $this->_get_site_font_styles();
+		if (!empty($site_style)) {
+			echo "<style type='text/css'>{$site_style}</style>\n";
 		}
 
-		$style = $this->_get_font_styles( $use_font, $fonttheme );
+		$fonts = TypeSquare_ST_Fonts::get_instance();
+		$font_pro_settings = $fonts->get_font_pro_setting();
+		if ($font_pro_settings && $param['fontThemeUseType'] == 4) {
+			$style = $this->_get_pro_font_styles( $font_pro_settings );
+		} else {
+			$fonttheme = $fonts->get_selected_fonttheme();
+			if ( ! isset( $fonttheme ) && ! $fonttheme ) {
+				return;
+			}
+			$use_font = $fonts->load_font_data( $fonttheme['font_theme'] );
+			if ( is_singular() ) {
+				$param = $fonts->get_fonttheme_params();
+				if ( isset( $param['typesquare_themes']['show_post_form'] ) && 'false' != $param['typesquare_themes']['show_post_form']  ) {
+					$post_theme = $fonts->get_selected_post_fonttheme( get_the_ID() );
+					$post_theme = $fonts->load_font_data( $post_theme );
+					if ( $post_theme ) {
+						$use_font = $post_theme;
+					}
+				}
+			}
+			$style = $this->_get_font_styles( $use_font, $fonttheme );
+		}
+
 		if ( $style ) {
 			$html = "<style type='text/css'>{$style}</style>";
 			echo $html;
@@ -132,23 +178,41 @@ class TypeSquare_ST {
 		if (  is_admin() || ! $query->is_main_query() || is_singular() ) {
 			return;
 		}
+		$auth  = TypeSquare_ST_Auth::get_instance();
+		$param = $auth->get_auth_status();
+		if ( '' === $param['typesquare_id'] ) {
+			return;
+		}
 
 		$fonts = TypeSquare_ST_Fonts::get_instance();
+
+		$this->styles = "";
+		$site_style = $this->_get_site_font_styles();
+		if (!empty($site_style)) {
+			$this->styles = "<style type='text/css'>{$site_style}</style>";
+		}
+
 		$fonttheme = $fonts->get_selected_fonttheme();
 		if ( ! isset( $fonttheme ) && ! $fonttheme ) {
 			return;
 		}
 		$font_param = $fonts->get_fonttheme_params();
 		$use_font = $fonts->load_font_data( $fonttheme['font_theme'] );
-
+		$font_pro_settings = $fonts->get_font_pro_setting();
+        if ($font_pro_settings && $param['fontThemeUseType'] == 4) {
+			$style = $this->_get_pro_font_styles($font_pro_settings);
+			$this->styles .= "<style type='text/css'>{$style}</style>";
+			return;
+        }
 
 		if ( ! $query->query ) {
 			$query->query = apply_filters( 'ts-default-query', array(
 				'post_type' => 'post',
 			) );
 		}
+
 		$the_query = new WP_Query( $query->query );
-		$style = false;
+		$style = "";
 		while ( $the_query->have_posts() ) : $the_query->the_post();
 			$id = get_the_ID();
 			if ( isset( $font_param['typesquare_themes']['show_post_form'] ) && 'false' != $font_param['typesquare_themes']['show_post_form']  ) {
@@ -162,7 +226,7 @@ class TypeSquare_ST {
 		endwhile;
 
 		if ( $style ) {
-			$this->styles = "<style type='text/css'>{$style}</style>";
+			$this->styles .= "<style type='text/css'>{$style}</style>";
 		}
 	}
 
@@ -220,18 +284,94 @@ class TypeSquare_ST {
 		}
 		if ( $text_target && $text_font ) {
 			$style .= "{$text_target}{ font-family: {$text_font};}";
+
 		}
 		if ( $bold_target && $bold_font ) {
 			$style .= "{$bold_target}{ font-family: {$bold_font};}";
 		}
+
+		return $style;
+	}
+
+	private function _get_site_font_styles () {
+		$fonts = TypeSquare_ST_Fonts::get_instance();
+		$site_font_settings = $fonts->get_site_font_setting();
+		$title_fontname = $site_font_settings['title_fontname'];
+		$catchcopy_fontname = $site_font_settings['catchcopy_fontname'];
+		$widget_title_fontname = $site_font_settings['widget_title_fontname'];
+		$widget_fontname = $site_font_settings['widget_fontname'];
+		$style = '';
+		if ( $title_fontname ) {
+			$title_target = ".site-branding .site-title a:lang(ja),.site-title";
+			$style .= "{$title_target}{ font-family: '{$title_fontname}';}";
+		}
+		if ( $catchcopy_fontname ) {
+			$catchcopy_target = ".site-description:lang(ja)";
+			$style .= "{$catchcopy_target}{ font-family: '{$catchcopy_fontname}';}";
+		}
+		if ( $widget_title_fontname) {
+			$widget_title_target = "section.widget h2:lang(ja),.widget-title";
+			$style .= "{$widget_title_target}{ font-family: '{$widget_title_fontname}';}";
+
+		}
+		if ( $widget_fontname ) {
+			$widget_target = "section.widget ul li:lang(ja),.widget-content ul li";
+			$style .= "{$widget_target}{ font-family: '{$widget_fontname}';}";
+		}
+
+		return $style;
+	}
+
+	private function _get_pro_font_styles ($font_pro_settings, $post_id = false) {
+		$style = '';
+		foreach ($font_pro_settings as $font_pro_setting) {
+			foreach ($font_pro_setting['fontlist_cls'] as $fontlist_cls) {
+				$target = esc_attr($fontlist_cls);
+				if ($post_id) {
+					$post_key = '#post-'. $post_id;
+					if ( '.hentry' == $target ) {
+						$target = "{$post_key}{$target}";
+					} else {
+						$target = "{$post_key} {$target}";
+					}
+				}
+				$fontf_amily = $font_pro_setting['fontlist_fontname'];
+				$style .= "{$target}{ font-family: '{$fontf_amily}';}";
+			}
+		}
 		return $style;
 	}
 }
+
+// クラシックエディタにフォントリスト追加
+// add_filter( 'mce_external_plugins', function ( $plugins ) {
+// 	$auth  = TypeSquare_ST_Auth::get_instance();
+// 	$param = $auth->get_auth_status();
+// 	if ( '' === $param['typesquare_id'] ) {
+// 		return;
+// 	}
+//     $plugins['ts_webfonts_plugin'] = plugins_url('inc/cs-editor.js', __FILE__ );
+//     return $plugins;
+// } );
+
+add_filter( 'mce_buttons', function ( $buttons ) {
+	$auth  = TypeSquare_ST_Auth::get_instance();
+	$param = $auth->get_auth_status();
+	if ( '' === $param['typesquare_id'] ) {
+		return;
+	}
+	$buttons[] = 'fontfamily_button';
+	return $buttons;
+} );
 
 register_uninstall_hook( __FILE__, 'ts_uninstall' );
 function ts_uninstall() {
 	delete_option( 'typesquare_auth' );
 	delete_option( 'typesquare_fonttheme' );
 	delete_option( 'typesquare_custom_theme' );
+	delete_option( 'typesquare_pro_setting' );
+	delete_option( 'typesquare_site_font_setting' );
 	return;
 }
+
+

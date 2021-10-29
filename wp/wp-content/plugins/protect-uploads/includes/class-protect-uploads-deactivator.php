@@ -1,13 +1,11 @@
 <?php 
-/**
- * triggered on deactivate
- */
-class Alti_ProtectUploads_Deactivator extends Alti_ProtectUploads_Admin {
+class Alti_ProtectUploads_Deactivator extends Alti_ProtectUploads {
 
 	public function run() {
-
-		$this->remove_index();
-		$this->remove_htaccess();		
+		$plugin = new Alti_ProtectUploads_Admin($this->plugin_name, $this->version);
+		$plugin->remove_index();
+		$plugin->remove_htaccess();
+		delete_option( $this->get_plugin_name().'-protection' );
 
 	}
 

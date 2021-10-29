@@ -452,7 +452,9 @@ class AIOWPSecurity_Database_Menu extends AIOWPSecurity_Admin_Menu
 	foreach ($config_contents as $line_num => $line) {
             $no_ws_line = preg_replace( '/\s+/', '', $line ); //Strip white spaces
             if(strpos($no_ws_line, $prefix_match_string) !== FALSE){
-                $config_contents[$line_num] = str_replace($table_old_prefix, $table_new_prefix, $line);
+                $prefix_parts = explode("=",$config_contents[$line_num]);
+                $prefix_parts[1] = str_replace($table_old_prefix, $table_new_prefix, $prefix_parts[1]);
+                $config_contents[$line_num] = implode("=",$prefix_parts);
                 break;
             }
 	}
@@ -575,11 +577,12 @@ class AIOWPSecurity_Database_Menu extends AIOWPSecurity_Admin_Menu
     {
         global $wpdb;
         $table_count = 0;
+        $db_name = $wpdb->dbname;
         $info_msg_string = '<p class="aio_info_with_icon">'.__('Checking for MySQL tables of type "view".....', 'all-in-one-wp-security-and-firewall').'</p>';
         echo ($info_msg_string);
         
         //get tables which are views
-        $query = "SELECT * FROM INFORMATION_SCHEMA.VIEWS";
+        $query = "SELECT * FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_SCHEMA LIKE '".$db_name."'";
         $res = $wpdb->get_results($query);
         if(empty($res)) return;
         $view_count = 0;

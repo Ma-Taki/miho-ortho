@@ -2,12 +2,12 @@
 # This file is distributed under the same license as the Themes - Twenty Fifteen package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2019-02-15 14:28:37+0000\n"
+"PO-Revision-Date: 2021-01-16 05:50:22+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: GlotPress/2.4.0-alpha\n"
+"X-Generator: GlotPress/3.0.0-alpha.2\n"
 "Language: ja_JP\n"
 "Project-Id-Version: Themes - Twenty Fifteen\n"
 
@@ -19,54 +19,54 @@ msgstr "2015年のデフォルトテーマはクリーンでブログ向けに�
 msgid "Twenty Fifteen"
 msgstr "Twenty Fifteen"
 
-#: functions.php:243
+#: functions.php:246
 msgid "Light Blue"
 msgstr "ライトブルー"
 
-#: functions.php:238
+#: functions.php:241
 msgid "Bright Blue"
 msgstr "ブライトブルー"
 
-#: functions.php:193
-msgid "Light Gray"
-msgstr "ライトグレー"
-
-#: functions.php:188
-msgid "Dark Gray"
-msgstr "ダークグレー"
-
-#: functions.php:208
-msgid "Dark Brown"
-msgstr "ダークブラウン"
-
-#: functions.php:198
-msgid "White"
-msgstr "白"
-
-#: functions.php:218
-msgid "Light Pink"
-msgstr "ライトピンク"
-
-#: functions.php:213
-msgid "Medium Pink"
-msgstr "ピンク"
-
-#: functions.php:233
+#: functions.php:236
 msgid "Blue Gray"
 msgstr "ブルーグレー"
 
-#: functions.php:223
+#: functions.php:226
 msgid "Dark Purple"
 msgstr "ダークパープル"
 
-#. translators: %s: post title
+#: functions.php:221
+msgid "Light Pink"
+msgstr "ライトピンク"
+
+#: functions.php:216
+msgid "Medium Pink"
+msgstr "ピンク"
+
+#: functions.php:211
+msgid "Dark Brown"
+msgstr "ダークブラウン"
+
+#: functions.php:201
+msgid "White"
+msgstr "白"
+
+#: functions.php:196
+msgid "Light Gray"
+msgstr "ライトグレー"
+
+#: functions.php:191
+msgid "Dark Gray"
+msgstr "ダークグレー"
+
+#. translators: %s: Post title.
 #: comments.php:31
 msgctxt "comments title"
 msgid "One thought on &ldquo;%s&rdquo;"
 msgstr "「%s」への1件のフィードバック"
 
-#. translators: %s: post title
-#: inc/template-tags.php:130
+#. translators: %s: Post title.
+#: inc/template-tags.php:132
 msgid "Leave a comment<span class=\"screen-reader-text\"> on %s</span>"
 msgstr "<span class=\"screen-reader-text\">%s に</span>コメントを残す"
 
@@ -86,50 +86,51 @@ msgstr "次の投稿:"
 msgid "Next"
 msgstr "次ページへ"
 
-#: search.php:18
+#. translators: %s: Search query.
+#: search.php:21
 msgid "Search Results for: %s"
 msgstr "検索結果: %s"
 
-#: inc/template-tags.php:120
+#: inc/template-tags.php:122
 msgctxt "Used before full size attachment link."
 msgid "Full size"
 msgstr "フルサイズ"
 
-#: inc/template-tags.php:108
+#: inc/template-tags.php:110
 msgctxt "Used before tag names."
 msgid "Tags"
 msgstr "タグ"
 
-#: inc/template-tags.php:99
+#: inc/template-tags.php:101
 msgctxt "Used before category names."
 msgid "Categories"
 msgstr "カテゴリー"
 
-#: inc/template-tags.php:95 inc/template-tags.php:104
+#: inc/template-tags.php:97 inc/template-tags.php:106
 msgctxt "Used between list items, there is a space after the comma."
 msgid ", "
 msgstr ", "
 
-#: inc/template-tags.php:89
+#: inc/template-tags.php:91
 msgctxt "Used before post author name."
 msgid "Author"
 msgstr "作成者"
 
-#: inc/template-tags.php:79
+#: inc/template-tags.php:81
 msgctxt "Used before publish date."
 msgid "Posted on"
 msgstr "投稿日:"
 
-#: inc/template-tags.php:56
+#: inc/template-tags.php:58
 msgctxt "Used before post format."
 msgid "Format"
 msgstr "フォーマット"
 
-#: inc/template-tags.php:49
+#: inc/template-tags.php:51
 msgid "Featured"
 msgstr "注目"
 
-#: inc/template-tags.php:30
+#: inc/template-tags.php:31
 msgid "Newer Comments"
 msgstr "新しいコメント"
 
@@ -141,27 +142,27 @@ msgstr "過去のコメント"
 msgid "Comment navigation"
 msgstr "コメントナビゲーション"
 
-#: inc/customizer.php:237
+#: inc/customizer.php:239
 msgid "Blue"
 msgstr "青"
 
-#: functions.php:228 inc/customizer.php:226
+#: functions.php:231 inc/customizer.php:228
 msgid "Purple"
 msgstr "紫"
 
-#: inc/customizer.php:215
+#: inc/customizer.php:217
 msgid "Pink"
 msgstr "ピンク"
 
-#: functions.php:203 inc/customizer.php:204
+#: functions.php:206 inc/customizer.php:206
 msgid "Yellow"
 msgstr "黄"
 
-#: inc/customizer.php:193
+#: inc/customizer.php:195
 msgid "Dark"
 msgstr "ダークカラー"
 
-#: inc/customizer.php:182
+#: inc/customizer.php:184
 msgid "Default"
 msgstr "デフォルト"
 
@@ -181,7 +182,8 @@ msgstr "ヘッダー・テキスト色"
 msgid "Base Color Scheme"
 msgstr "ベース配色"
 
-#: inc/back-compat.php:37 inc/back-compat.php:48 inc/back-compat.php:64
+#. translators: %s: WordPress version.
+#: inc/back-compat.php:38 inc/back-compat.php:50 inc/back-compat.php:67
 msgid "Twenty Fifteen requires at least WordPress version 4.1. You are running version %s. Please upgrade and try again."
 msgstr "Twenty Fifteen には WordPress バージョン 4.1 以上が必要です。現在のバージョンは %s です。アップグレードしてもう一度お試しください。"
 
@@ -198,47 +200,47 @@ msgstr "次の画像"
 msgid "Previous Image"
 msgstr "前の画像"
 
-#: header.php:49
+#: header.php:50
 msgid "Menu and widgets"
 msgstr "﻿メニューとウィジェット"
 
-#: header.php:26
+#: header.php:27
 msgid "Skip to content"
 msgstr "コンテンツへスキップ"
 
-#: functions.php:399
+#: functions.php:403
 msgid "collapse child menu"
 msgstr "サブメニューを閉じる"
 
-#: functions.php:398
+#: functions.php:402
 msgid "expand child menu"
 msgstr "サブメニューを展開"
 
-#: functions.php:319
+#: functions.php:322
 msgctxt "Add new subset (greek, cyrillic, devanagari, vietnamese)"
 msgid "no-subset"
 msgstr "no-subset"
 
-#: functions.php:311
+#: functions.php:314
 msgctxt "Inconsolata font: on or off"
 msgid "on"
 msgstr "on"
 
-#: functions.php:303
+#: functions.php:306
 msgctxt "Noto Serif font: on or off"
 msgid "on"
 msgstr "on"
 
-#: functions.php:295
+#: functions.php:298
 msgctxt "Noto Sans font: on or off"
 msgid "on"
 msgstr "on"
 
-#: functions.php:268
+#: functions.php:271
 msgid "Add widgets here to appear in your sidebar."
 msgstr "サイドバーに表示されるウィジェットを追加できます。"
 
-#: functions.php:266
+#: functions.php:269
 msgid "Widget Area"
 msgstr "﻿ウィジェット エリア"
 
@@ -250,37 +252,39 @@ msgstr "﻿ソーシャルリンクメニュー"
 msgid "Primary Menu"
 msgstr "メインメニュー"
 
-#: footer.php:31
+#. translators: %s: WordPress
+#: footer.php:33
 msgid "Proudly powered by %s"
 msgstr "Proudly powered by %s"
 
-#: content-none.php:31
+#: content-none.php:36
 msgid "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help."
 msgstr "お探しのコンテンツを見つけられませんでした。検索をお試しください。"
 
-#: content-none.php:26
+#: content-none.php:31
 msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
 msgstr "ご指定の検索条件に一致する投稿がありませんでした。他のキーワードでもう一度検索してみてください。"
 
-#: content-none.php:22
-msgid "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
-msgstr "最初の投稿をする準備ができましたか ?  <a href=\"%1$s\">ここからスタート</a>してください。"
+#. translators: %s: Post editor URL.
+#: content-none.php:25
+msgid "Ready to publish your first post? <a href=\"%s\">Get started here</a>."
+msgstr "最初の投稿を公開する準備はできましたか ? <a href=\"%s\">ここから始めましょう</a>。"
 
 #: content-none.php:15
 msgid "Nothing Found"
 msgstr "見つかりません"
 
-#: content-page.php:37 content.php:61 content-search.php:28
-#: content-search.php:33 image.php:74 content-link.php:60
+#: content-link.php:60 content.php:61 image.php:74 content-search.php:28
+#: content-search.php:33 content-page.php:37
 msgid "Edit"
 msgstr "編集"
 
-#: content-page.php:26 content.php:41 image.php:61 content-link.php:39
+#: content-link.php:39 content.php:41 image.php:61 content-page.php:26
 msgid "Pages:"
 msgstr "ページ:"
 
-#. translators: %s: Name of current post
-#: content.php:34 inc/template-tags.php:249 content-link.php:32
+#. translators: %s: Post title.
+#: content-link.php:32 content.php:34 inc/template-tags.php:252
 msgid "Continue reading %s"
 msgstr "続きを読む %s"
 
@@ -288,14 +292,15 @@ msgstr "続きを読む %s"
 msgid "Comments are closed."
 msgstr "コメントは停止中です。"
 
-#. translators: 1: number of comments, 2: post title
+#. translators: 1: Number of comments, 2: Post title.
 #: comments.php:35
 msgctxt "comments title"
 msgid "%1$s thought on &ldquo;%2$s&rdquo;"
 msgid_plural "%1$s thoughts on &ldquo;%2$s&rdquo;"
 msgstr[0] "「%2$s」への%1$s件のフィードバック"
 
-#: author-bio.php:34
+#. translators: %s: Author display name.
+#: author-bio.php:36
 msgid "View all posts by %s"
 msgstr "%s の投稿をすべて表示"
 
@@ -303,16 +308,16 @@ msgstr "%s の投稿をすべて表示"
 msgid "Published by"
 msgstr "投稿者:"
 
-#: content-page.php:30 content.php:45 image.php:65 search.php:43 archive.php:53
-#: index.php:50 content-link.php:43
+#: content-link.php:43 index.php:50 content.php:45 archive.php:53 search.php:48
+#: image.php:65 content-page.php:30
 msgid "Page"
 msgstr "ページ"
 
-#: search.php:42 archive.php:52 index.php:49
+#: index.php:49 archive.php:52 search.php:47
 msgid "Next page"
 msgstr "次ページ"
 
-#: search.php:41 archive.php:51 index.php:48
+#: index.php:48 archive.php:51 search.php:46
 msgid "Previous page"
 msgstr "前のページ"
 

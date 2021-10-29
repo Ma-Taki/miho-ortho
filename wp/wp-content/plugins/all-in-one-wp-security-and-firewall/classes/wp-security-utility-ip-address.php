@@ -32,7 +32,7 @@ class AIOWPSecurity_Utility_IP
         //Check if multiple IPs were given - these will be present as comma-separated list
         
         if(stristr($visitor_ip, ',')){
-            $visitor_ip = trim(end((explode(',', $visitor_ip)))); //get last address because this will likely be the original connecting IP
+            $visitor_ip = trim(reset((explode(',', $visitor_ip)))); //get first address because this will likely be the original connecting IP
         }
         
         //Now remove port portion if applicable
@@ -76,7 +76,7 @@ class AIOWPSecurity_Utility_IP
     
     static function create_ip_list_array_from_string_with_newline($ip_addresses)
     {
-        $ip_list_array = explode(PHP_EOL, $ip_addresses);
+        $ip_list_array = preg_split("/\R/", $ip_addresses);
         return $ip_list_array;
     }
     
@@ -219,6 +219,8 @@ class AIOWPSecurity_Utility_IP
         if(empty($ip_address) || empty($whitelisted_ips)) return false;
         
         $ip_list_array = AIOWPSecurity_Utility_IP::create_ip_list_array_from_string_with_newline($whitelisted_ips);
+        
+        if(empty($ip_list_array)) return false;
         
         $visitor_ipParts = explode('.', $ip_address);
         foreach ($ip_list_array as $white_ip){

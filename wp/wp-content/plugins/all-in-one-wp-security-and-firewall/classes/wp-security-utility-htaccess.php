@@ -89,7 +89,9 @@ class AIOWPSecurity_Utility_Htaccess
             return false; //unable to write to the file
         }
 
-        $htaccess = ABSPATH . '.htaccess';
+        if ( !function_exists( 'get_home_path' ) ) require_once( ABSPATH. '/wp-admin/includes/file.php' );
+        $home_path = get_home_path();
+        $htaccess = $home_path . '.htaccess';
 
         if (!$f = @fopen($htaccess, 'a+')) {
             @chmod($htaccess, 0644);
@@ -137,8 +139,9 @@ class AIOWPSecurity_Utility_Htaccess
      */
     static function delete_from_htaccess($section = 'All In One WP Security')
     {
-        //TODO
-        $htaccess = ABSPATH . '.htaccess';
+        if ( !function_exists( 'get_home_path' ) ) require_once( ABSPATH. '/wp-admin/includes/file.php' );
+        $home_path = get_home_path();
+        $htaccess = $home_path . '.htaccess';
 
         @ini_set('auto_detect_line_endings', true);
         if (!file_exists($htaccess)) {
@@ -357,8 +360,13 @@ class AIOWPSecurity_Utility_Htaccess
             //disable the server signature
             $rules .= 'ServerSignature Off' . PHP_EOL;
 
-            //limit file uploads to 10mb
-            $rules .= 'LimitRequestBody 10240000' . PHP_EOL;
+            //limit file upload size
+            $upload_limit = $aio_wp_security->configs->get_value('aiowps_max_file_upload_size');
+            //Shouldn't be empty but just in case
+            $upload_limit = empty($upload_limit)?10:$upload_limit;
+            $upload_limit = $upload_limit * 1024 * 1024; // Convert from MB to Bytes - approx but close enough
+            
+            $rules .= 'LimitRequestBody '.$upload_limit . PHP_EOL;
 
             // protect wpconfig.php.
             $rules .= self::create_apache2_access_denied_rule('wp-config.php');

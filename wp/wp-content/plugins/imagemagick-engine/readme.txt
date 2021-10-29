@@ -1,9 +1,9 @@
 === ImageMagick Engine ===
-Contributors: rickardw, johanee
+Contributors: rickardw, orangelab
 Tags: image, images, picture, imagemagick, gd
-Requires at least: 2.9
-Tested up to: 4.1
-Stable tag: 1.5.1
+Requires at least: 3.0
+Tested up to: 5.5.0
+Stable tag: 1.6.5
 
 Improve the quality of re-sized images by replacing standard GD library with ImageMagick.
 
@@ -19,7 +19,7 @@ Features
 * Configure image quality or use dynamically computed default value
 * Optimize different image sizes for either quality or size
 
-Lnguages: English, French, German, Swedish
+Lnguages: English, French, German, Swedish, Turkish
 
 Requires either ImageMagick binary or Imagick PHP module.
 
@@ -31,7 +31,7 @@ Requires either ImageMagick binary or Imagick PHP module.
 4. Configure ImageMagick settings and enable it on plugin settings page.
 5. Regenerate existing images to take advantage of the new features.
 
-If you have any questions or problems please make a comment here: http://wp.orangelab.se/imagemagick-engine/
+If you have any questions or problems please make write in the support forum.
 
 == Frequently Asked Questions ==
 
@@ -39,7 +39,7 @@ If you have any questions or problems please make a comment here: http://wp.oran
 
 ImageMagick can result in huge improvements in the quality of re-sized images.
 
-Take a look at the supplied screenshot, or try it yourself. More examples will be available on the plugin website (http://wp.orangelab.se/imagemagick-engine/).
+Take a look at the supplied screenshot, or try it yourself.
 
 Note that the new images tend to be slightly larger than those of the standard GD library, especially if you specify a very high image quality (95+).
 
@@ -70,10 +70,38 @@ You'll probably have problems with various other plugins too unless you fix this
 
 == Screenshots ==
 
-1. Example image: ImageMagick vs GD
-2. Administration interface
+1. Administration interface
 
 == Changelog ==
+
+= 1.6.5 =
+* Turkish translation thanks to Haydar ŞAHİN
+* Bugfix
+* Tested compability with WordPress 5.5
+
+= 1.6.4 =
+* Critical bugfix for .jpeg files
+
+= 1.6.3 =
+* Clean up code and constant for version (thanks @paulschreiber)
+* Disable warning for is_executable if open_basedir active
+
+= 1.6.2 =
+* Added medium_large image size by default
+* Display version of ImageMagick CLI (thanks @marcissimus)
+
+= 1.6.1 =
+* Fixed deprecated use of gd_edit_image_support (thanks @chesio)
+
+= 1.6.0 =
+* Small bug fixes
+* Small updates to admin UI
+
+= 1.5.4 =
+* Fixed a bug that could cause transparency errors with PNG
+
+= 1.5.3 =
+* Tested with WP 5.0
 
 = 1.5.2 =
 * Tested with WP 4.1
@@ -156,3 +184,7 @@ You'll probably have problems with various other plugins too unless you fix this
 
 = 1.2.0 =
 Fixes plugin jQuery UI script incompatibility for WordPress 3.1
+
+== Contribute ==
+
+Code repo available on https://github.com/orangelabweb/imagemagick-engine/

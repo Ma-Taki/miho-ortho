@@ -4,6 +4,7 @@ class TypeSquare_Admin_Root extends TypeSquare_Admin_Base {
 	private static $text_domain;
 	private function __construct(){}
 
+
 	public static function get_instance() {
 		if ( ! isset( self::$instance ) ) {
 			$c = __CLASS__;
@@ -20,7 +21,7 @@ class TypeSquare_Admin_Root extends TypeSquare_Admin_Base {
 		}
 		$post_type = array( 'post', 'page' );
 		foreach ( $post_type as $type ) {
-			add_meta_box( 'typesquare_post_metabox', __( 'TypeSquare Webfonts for SAKURA RS', self::$text_domain ), array( $this, 'typesquare_post_metabox_inside' ), $type, 'advanced', 'low' );
+			add_meta_box( 'typesquare_post_metabox', __( 'TS Webfonts for SAKURA RS', self::$text_domain ), array( $this, 'typesquare_post_metabox_inside' ), $type, 'advanced', 'low' );
 		}
 	}
 
@@ -52,7 +53,64 @@ class TypeSquare_Admin_Root extends TypeSquare_Admin_Base {
 			$option .= '</option>';
 		}
 		$html .= '<h3>'. __( 'フォントテーマから選ぶ', self::$text_domain ) . '</h3>';
-		$html .= "<select name='typesquare_fonttheme[theme]'>{$option}</select>";
+		$preview = <<<EOM
+jQuery( document ).ready(function() {
+	window.onload = function () {
+		theme_preview_new();
+	};
+
+	jQuery('#choiceThemeNew').change(function() {
+		theme_preview_new();
+	});
+
+	function theme_preview_new() {
+		var select_val = jQuery('.font_theme_select_pre_new option:selected').val();
+		if( select_val === "false") {
+			jQuery('.pre_title').text("");
+			jQuery('.pre_lead').text("");
+			jQuery('.pre_body').text("");
+			jQuery('.pre_bold').text("");
+		} else {
+			var val = document.getElementById("selected-get-" + select_val);
+			var theme_data = JSON.parse(val.value);
+
+			jQuery('#theme_preview').val(val);
+
+			jQuery('.pre_title').text(theme_data.fonts.title);
+			jQuery('.pre_title').css("font-family", `'\${theme_data.fonts.title}'`);
+
+			jQuery('.pre_lead').text(theme_data.fonts.lead);
+			jQuery('.pre_lead').css("font-family", `'\${theme_data.fonts.lead}'`);
+
+			if (theme_data.fonts.content) {
+				jQuery('.pre_body').text(theme_data.fonts.content);
+				jQuery('.pre_body').css("font-family", `'\${theme_data.fonts.content}'`);
+			} else {
+				jQuery('.pre_body').text(theme_data.fonts.text);
+				jQuery('.pre_body').css("font-family", `'\${theme_data.fonts.text}'`);
+			}
+
+			jQuery('.pre_bold').text(theme_data.fonts.bold);
+			jQuery('.pre_bold').css("font-family", `'\${theme_data.fonts.bold}'`);
+		}
+	}
+		});
+EOM;
+		$html = '<script>';
+		$html .= $preview;
+		$html .= '</script>';
+		$html .= '<div id="choiceThemeNew">';
+		$html .= "<select name='typesquare_fonttheme[theme]' class='font_theme_select_pre_new'>{$option}</select>";
+		$html .= '<h3>プレビュー</h3>';
+		$html .= '<div><p class="title">見出し：<p class="pre_title"></p></p></div>';
+		$html .= '<div><p class="title">リード：<p class="pre_lead"></p></p></div>';
+		$html .= '<div><p class="title">本文：<p class="pre_body"></p></p></div>';
+		$html .= '<div><p class="title">太字：<p class="pre_bold"></p></p></div>';
+		$html .= '<input type="hidden" id="theme_preview" />';
+		foreach ($all_font_theme as $fonttheme_key => $fonttheme) {
+				$html .= "<input type='hidden' id='selected-get-{$fonttheme_key}' value='" . json_encode($fonttheme) . "'>";
+		}
+		$html .= '</div>';
 		return $html;
 	}
 
@@ -113,110 +171,207 @@ class TypeSquare_Admin_Root extends TypeSquare_Admin_Base {
 		$param = $this->get_auth_params();
 		$option_name = 'typesquare_auth';
 		$nonce_key = TypeSquare_ST::OPTION_NAME;
+		$auth_param = $this->get_auth_params();
+		echo "<style type='text/css' rel='stylesheet'>";
+		echo "</style>";
 		echo "<div class='wrap'>";
-		echo '<h2>'. __( 'TypeSquare Webfonts Plugin for さくらのレンタルサーバ' , self::$text_domain ). '</h2>';
+		echo '<h2>'. __( 'TS Webfonts for SAKURA RS' , self::$text_domain ). '</h2>';
 		do_action( 'typesquare_add_setting_before' );
-		$autho_param = $this->get_auth_params();
-		if ( false !== $autho_param['typesquare_auth']['auth_status'] ) {
-			echo $this->get_font_theme_form();
-			echo '<hr/>';
-			echo "<div class='ts-custome_form_row'>";
-			echo '<span><h3 class="toggleText toggleAdvanced mTop20">'. __( '上級者向けのカスタマイズ', self::$text_domain ). '<span class="advancedTriangle">▼</span></h3></span>';
-			echo "<div class='ts-custome_form hidden'>";
-			echo $this->get_font_target_form();
-			echo $this->update_font_list_form();
-			echo $this->_get_post_font_form();
-			echo '</div>';
-			echo '</div>';
-		}
+		echo '<hr />';
+		echo '<span><h3 class="toggleText toggleAdvanced_font mTop20">'. __( '投稿記事フォント設定', self::$text_domain ). '<span class="advancedTriangle advancedTriangle_font">▼</span></h3></span>';
+		echo "<div class='ts-custome_form_font hidden'>";
+		echo $this->_get_post_font_form($auth_param);
+		echo '</div>';
+		echo '</div>';
+
+		echo '<hr/>';
+		echo '<span><h3 class="toggleText toggleAdvanced_site mTop20">'. __('サイトフォント設定', self::$text_domain). '<span class="advancedTriangle advancedTriangle_site">▼</span></h3></span>';
+		echo "<div class='ts-custome_form_site hidden'>";
+		echo $this->_get_site_font_form();
+		echo '</div>';
+		echo '<hr/>';
+		echo '<span><h3 class="toggleText toggleAdvanced_article mTop20">'. __('カスタムテーマ編集', self::$text_domain). '<span class="advancedTriangle advancedTriangle_article">▼</span></h3></span>';
+		echo "<div class='ts-custome_form_article hidden'>";
+		echo '<div class="ts-custum_block">';
+		echo $this->_get_font_theme_custom_form();
+		echo '</div>';
+		echo '</div>';
 		do_action( 'typesquare_add_setting_after' );
 	}
 
-	private function _get_post_font_form() {
+	private function _get_post_font_form($auth_param) {
+		$html = "<form method='post' action=''>";
+		$html .= '<p>投稿記事に対するWebフォント適用方法を設定します。</p>';
+		$html .=  '<div class="block_wrap">';
+		$html .=  '<p class="block_title">'. __('投稿記事に適用するフォント設定', self::$text_domain). '</p>';
+		$html .=  '<div class="label_wrapper">';
+		$html .= '<label class="custum_form_ladio"><input name="fontThemeUseType" type="radio" value="1">指定しない';
+		$html .= '<p class="setting_read">フォントテーマを適用しません。</p>';
+		$html .= '</label>';
+		$html .= '<label class="custum_form_ladio"><input name="fontThemeUseType" type="radio" value="2" class="radio_custum_font_theme">共通テーマ指定';
+		$html .= '<p class="setting_read">全ての投稿に設定したフォントテーマが適用されます。</p>';
+		$html .= '</label>';
+		$html .= $this->_get_font_theme_form();
+		$html .= '<label class="custum_form_ladio"><input name="fontThemeUseType" type="radio" value="3">個別テーマ指定';
+		$html .= '<p class="setting_read">投稿ごとに設定したフォントテーマが適用されます。</p>';
+		$html .= '</label>';
+		$html .= '<label class="custum_form_ladio"><input name="fontThemeUseType" type="radio" value="4">直接指定（上級者向け）';
+		$html .= '<p class="setting_read">CSSセレクターを指定して適用するウェブフォントを選べます。</p>';
+		$html .= '</label>';
+		$html .= $this->_get_font_target_form();
+
+		$fonts = TypeSquare_ST_Fonts::get_instance();
+		$fonttheme_params = $fonts->get_fonttheme_params();
+
+		if (empty($auth_param['typesquare_auth']['fontThemeUseType'])) {
+			if (empty($fonttheme_params['typesquare_themes']['font_theme']) || $fonttheme_params['typesquare_themes']['font_theme'] === "false") {
+				$html .= '<input type="hidden" id="activeAdvanced_theme" value="1">';
+			} else {
+				$html .= '<input type="hidden" id="activeAdvanced_theme" value="2">';
+			}
+		} else {
+			if (!empty($fonttheme_params['typesquare_themes']['font_theme']) && $auth_param['typesquare_auth']['fontThemeUseType'] === "1") {
+				$html .= '<input type="hidden" id="activeAdvanced_theme" value="2">';
+			} else {
+				$html .= '<input type="hidden" id="activeAdvanced_theme" value="' . $auth_param['typesquare_auth']['fontThemeUseType'] . '">';
+			}
+		}
+
+		$html .=  '</div>';
+		$html .=  '</div>';
+		$html .=  get_submit_button( __( '投稿フォント設定を保存する', self::$text_domain ) );
+		$html .= '</form>';
+		return $html;
+	}
+
+	private function _get_auth_form($auth_param) {
+		$html  = '';
+		$nonce_key = TypeSquare_ST::OPTION_NAME;
+		$html .= "<form method='post' action='' id='authForm'>";
+		$html .= wp_nonce_field( $nonce_key, self::MENU_ID , true , false );
+		$html .= "<table class='widefat form-table'>";
+		$html .= '<tbody>';
+		$param = $this->get_auth_params();
+		$option_name = 'typesquare_auth';
+		foreach ( $param['typesquare_auth_keys'] as $key => $title ) {
+			$html .= "<tr><td>";
+			$name = "{$option_name}[{$key}]";
+			$type = 'hidden';
+			$name	= esc_attr( $name );
+			$id		= esc_attr( $key );
+			$value = "SAKURA";
+			$html .= "<input
+				name='{$name}'
+				id='{$id}'
+				value='{$value}'
+				required
+				type='{$type}'
+				data-parsley-trigger='change'
+				class='regular-text code'
+			/>";
+			$html .= '</td></tr>';
+		}
+		$html .= '</tbody>';
+		$html .= '</div>';
+		$html .= '</table>';
+		if ( '' !== $auth_param['typesquare_auth']['typesquare_id'] ) {
+			$html .= '<div class="block_wrap">';
+			$html .= "<table class='widefat form-table'>";
+			$html .= '<tbody>';
+			$html .= $this->_get_font_fade_form();
+			$html .= $this->_get_auto_load_font_form();
+			$html .= $this->_get_apply_to_hidden_form();
+			$html .= $this->_get_apply_to_pseudo_form();
+			$html .= '</tbody>';
+			$html .= "</table>";
+			$html .= '</div>';
+		}
+
+			$html .= $this->_update_font_list_form();
+			$html .= get_submit_button( __( 'TypeSquare設定を保存する', self::$text_domain ) );
+
+		$html .= '</form>';
+		return $html;
+	}
+
+	private function _get_ad_area() {
+		$html = '<script>';
+		$endpoint = path_join( TS_PLUGIN_URL , 'inc/font.json' );
+		$html .= "var json_endpoint = '{$endpoint}';";
+		if ( $font_list ) {
+			$html .= "var current_font = ". json_encode( $font_list ) .';';
+		} else {
+			$html .= "var current_font = false;";
+		}
+		$html .= $script;
+		$html .= '</script>';
+		$html .= "<div class='ts-ad-area'>";
+		$messages[] = __( '・ご利用にはTypeSquareの会員登録が必要です (<a href="https://typesquare.com">https://typesquare.com</a>)', self::$text_domain );
+		$messages[] = __( '・利用プランによっては利用可能な書体数に上限がありますので、上限を超えて設定したフォントは配信されません。', self::$text_domain );
+		$messages[] = '　'. __( '・無料プラン：1書体', self::$text_domain );
+		$messages[] = '　'. __( '', self::$text_domain );
+		$messages[] = '　'. __( '・スタンダードIプラン：3書体', self::$text_domain );
+		$html .= '<ul>';
+		$html .= '<li style="padding-bottom: 5px;"><span href="#" class="toggleLimit toggleText">' . __( 'ご利用上の注意', self::$text_domain ). '</span><span class="textMute elimitTriangl" style="float: right;">▼</span></li>';
+		$html .= '<div id="ts-ad-area-messages" class="ts-hidden">';
+		foreach ( $messages as $message ) {
+			$html .= "<li>{$message}</li>";
+		}
+		$html .= "<p><a href='https://typesquare.com/ja/service/plan' target='_blank' class='button button-hero'>". __( '→プランを見てみる', self::$text_domain ) . '</a></p>';
+		$html .= '</div>';
+		$html .= '</ul>';
+		$html .= '</div>';
+		$html .= '<div class="mTop30">';
+		$html .= '<h3 class="mBottom10">'. __( 'ご利用方法' , self::$text_domain ). '</h3>';
+		$html .= '<div>'. __( 'TypeSquare Webfontsについての内容を説明しています' , self::$text_domain ). '</div>';
+		$html .= '<div>'. __( '詳しくは' , self::$text_domain ). "<a href='https://blog.typesquare.com/archives/55354' target='_blank'>". __( 'こちら' , self::$text_domain ). '</a></div>';
+		$html .= '</div>';
+
+		return $html;
+	}
+
+	private function _get_font_fade_form() {
 		$option_name = 'typesquare_fonttheme';
 		$fonts = TypeSquare_ST_Fonts::get_instance();
 		$param = $fonts->get_fonttheme_params();
 		$keys = $param['typesquare_themes_keys'];
-		$html  = '';
-		$html .= '<hr/>';
-		$html .= "<form method='post' action=''>";
-		$html .= '<h3>'. __( '個別記事フォント設定' , self::$text_domain ). '</h3>';
-		$html .= '<p>'. __( '個別記事作成画面にフォント設定を表示します。' , self::$text_domain ). '</p>';
-		$html .= wp_nonce_field( 'ts_update_font_settings' , 'ts_update_font_settings' , true , false );
-		$html .= "<table class='widefat form-table'>";
-		$html .= '<tbody>';
-		$html .= "<tr><th>　{$keys['show_post_form']}</th><td>";
-		$value = esc_attr( $param['typesquare_themes']['show_post_form'] );
-		$html .= '<label>';
-		$html .= "<input name='{$option_name}[show_post_form]' type='hidden' id='show_post_form' value='false' class='code'/>";
-		$html .= "<input name='{$option_name}[show_post_form]' value='true' id='show_post_form' type='checkbox' class='code' ".checked( $value, 'true', true )."/>";
-		$html .= __( '有効化する' , self::$text_domain );
-		$html .= '</label>';
-		$html .= '<p>'. __( 'デフォルトではフォントテーマ設定が無効化されています。' , self::$text_domain ). '</p>';
-		$html .= '</td></tr>';
-		$html .= '<tr><th></th><td style="position: relative; left: -208px;">' . get_submit_button( __( '個別記事フォント設定を更新する', self::$text_domain ) ) . '</td></tr>';
-		$html .= '</tbody>';
-		$html .= '</table>';
-		$html .= '</form>';
-		return $html;
+		$html .= "<tr><th>{$keys['fade_in']}</th><td>";
+		$value = esc_attr( $param['typesquare_themes']['fade_in'] );
+		if ( $value ) {
+			$optional = 'checked';
+		}
 
+		$html .="<label class='switch__label' ><input name='{$option_name}[fade_in]'type='checkbox' class='switch__input' id='fade_in' value='1' ". checked( $value, true, false ). "/><span class='switch__content'></span><span class='switch__circle'></span></label><span>有効化する</span>";
+		$html .= '</td></tr>';
+		if ( $value ) {
+			$state = 'ts-table-low';
+		} else {
+			$state = 'hidden';
+		}
+		$html .= "<tr id='hidden_time' class='{$state}'><th>{$keys['fade_time']}</th><td>";
+		$value = esc_attr( $param['typesquare_themes']['fade_time'] );
+		$optional = "size='5' maxlength='5'";
+		$html .= "<input name='{$option_name}[fade_time]' type='text' id='fade_time' value='{$value}' class='code' {$optional}/>";
+		$html .= __( 'ミリ秒(0〜10000の整数)', self::$text_domain );
+		$html .= '</td></tr>';
+
+		return $html;
 	}
 
-	public function get_font_theme_form() {
-		$current = get_option('typesquare_fonttheme');
-		$options = get_option( 'typesquare_custom_theme' );
-		$edit_theme = false;
-		$display = 'display:none';
-		if ( isset( $_POST['typesquare_fonttheme'] ) ) {
-			$edit_theme = esc_attr( $_POST['typesquare_fonttheme']['font_theme'] );
-			$display = "";
-		}
-		$edit_theme = '';
-		if( isset($_POST['ts_change_edit_theme']) ){
-			$edit_theme = 'change';
-		}
-		$edit_mode = '';
-		if( isset( $_POST['ts_edit_mode'] ) ) {
-			$edit_mode = $_POST['ts_edit_mode'];
-		}
-		if($edit_theme === 'change'){$display = 'display:none';}
-		if($edit_mode === 'delete' || $edit_mode === 'new' || $edit_theme === 'false' || !$edit_theme || !$edit_theme){ $display = 'display:none'; }
-		else{$display = "";}
+	private function _get_font_theme_form() {
 		$option_name = 'typesquare_fonttheme';
 		$fonts = TypeSquare_ST_Fonts::get_instance();
 		$param = $fonts->get_fonttheme_params();
-		$all_font_theme = $fonts->load_all_font_data( );
-		$font_theme = TypeSquare_ST_Fonttheme::get_instance();
-		$custom_theme_json = $font_theme->get_custom_theme_json();
-		if ( $current['font_theme'] && $options['theme'][ $current['font_theme'] ] && $edit_mode !== 'new' ) { $display = ""; }
-		if( isset($_POST['typesquare_fonttheme']['font_theme']) &&  $_POST['typesquare_fonttheme']['font_theme'] !== 'new'){
-			$param['typesquare_themes']['font_theme'] = $_POST['typesquare_fonttheme']['font_theme'];
-		}
 		$html  = '';
-		$html .= '<hr/>';
-		$html .= "<form method='post' action='' id='custmeFontForm'>";
-		$html .= '<h3>'. __( 'フォントテーマ設定' , self::$text_domain ). '</h3>';
-		$html .= '<p>'. __( 'フォントテーマを選択してください。' , self::$text_domain ). '<br/>';
-		$html .= '<strong>'. __( '※「新しくテーマを作成する」から、自由にフォントテーマを作成できます。' , self::$text_domain ). '</strong></p>';
 		$html .= wp_nonce_field( 'ts_update_font_settings' , 'ts_update_font_settings' , true , false );
-		$html .= "<table class='widefat form-table'>";
-		$html .= '<thead>';
-		$html .= "<tr><th>　{$param['typesquare_themes_keys']['font_theme']}</th></tr>";
-		$html .= '</thead>';
-		$html .= '<tbody>';
-		$html .= '<tr><td>';
-		$html .= "<select id='fontThemeSelect' name='{$option_name}[font_theme]'>";
-		$html .= "<option value='false'>テーマを設定しない</option>";
-		$newSelect = '';
-		if($edit_mode === 'new'){
-			$newSelect = 'selected';
-		}
-		$html .= "<option value='new' {$newSelect}>新しくテーマを作成する</option>";
+		$html .= '<div id="choiceTheme" class="font_custum_select">';
+		$html .= "<select name='{$option_name}[font_theme]' class='font_theme_select_pre'>";
+		$all_font_theme = $fonts->load_all_font_data();
 		foreach ( $all_font_theme as $fonttheme_key => $fonttheme ) {
 			$fonttheme_name = esc_attr( $fonttheme['name'] );
 			$font_text = $this->_get_fonttheme_text( $fonttheme );
 			$selected	= '';
-			if ( $fonttheme_key == $param['typesquare_themes']['font_theme'] && $fonttheme_key !== 'false' && !$newSelect ) {
+			if ( $fonttheme_key == $param['typesquare_themes']['font_theme']) {
 				$selected = 'selected';
 			}
 			$html .= "<option value='{$fonttheme_key}' {$selected}>";
@@ -224,100 +379,123 @@ class TypeSquare_Admin_Root extends TypeSquare_Admin_Base {
 			$html .= '</option>';
 		}
 		$html .= '</select>';
+		$html .= '<h3>プレビュー</h3>';
+		$html .= '<div><p class="title">見出し：<p class="pre_title"></p></p></div>';
+		$html .= '<div><p class="title">リード：<p class="pre_lead"></p></p></div>';
+		$html .= '<div><p class="title">本文：<p class="pre_body"></p></p></div>';
+		$html .= '<div><p class="title">太字：<p class="pre_bold"></p></p></div>';
+		$html .= '<input type="hidden" id="theme_preview" />';
+		foreach ($all_font_theme as $fonttheme_key => $fonttheme) {
+				$html .= "<input type='hidden' id='selected-get-{$fonttheme_key}' value='" . json_encode($fonttheme) . "'>";
+		}
+		$html .= wp_nonce_field( 'ts_update_font_settings' , 'ts_update_font_settings' , true , false );
+
+		$value = esc_attr( $param['typesquare_themes']['show_post_form'] ) == "true" ? true : false;
+		$html .= '</div>';
+		$html .= '<input type="hidden" name="typesquare_nonce_postmeta" id="typesquare_nonce_postmeta" value="' . wp_create_nonce( plugin_basename( __FILE__ ) ) . '" />';
+		return $html;
+	}
+
+	private function _get_font_theme_custom_form() {
+		$option_name = 'typesquare_fonttheme';
+		$fonts = TypeSquare_ST_Fonts::get_instance();
+		$param = $fonts->get_fonttheme_params();
+		if( isset($_POST['typesquare_fonttheme']['font_theme']) &&  $_POST['typesquare_fonttheme']['font_theme'] !== 'new'){
+			$param['typesquare_themes']['font_theme'] = $_POST['typesquare_fonttheme']['font_theme'];
+		}
+		$html  = '';
+		$html .= "<form method='post' action='' id='custmeFontForm' class='b__font_theme_form'>";
+		$html .= '<p>お好きなフォントを組み合わせてテーマを作成できます。また、作成したテーマの編集ができます。</p>';
+		$html .= wp_nonce_field( 'ts_update_font_settings' , 'ts_update_font_settings' , true , false );
+		$html .= '<div class="font_custum_select">';
+		$html .= "<select id='fontThemeSelect' name='{$option_name}[font_theme]'>";
+		$html .= "<option value='new' selected>新しくテーマを作成する</option>";
+		$coustam_font_theme = $fonts->load_coustam_font_data();
+		if (!empty($coustam_font_theme)) {
+			foreach ( $coustam_font_theme as $fonttheme_key => $fonttheme ) {
+				$fonttheme_name = esc_attr( $fonttheme['name'] );
+				$font_text = $this->_get_fonttheme_text( $fonttheme );
+				$selected	= '';
+				$html .= "<option value='{$fonttheme_key}' {$selected}>";
+				$html .= "{$fonttheme_name} ( {$font_text} )";
+				$html .= '</option>';
+			}
+		}
+		$html .= '</select>';
+		if (!empty($coustam_font_theme)) {
+			foreach ($coustam_font_theme as $fonttheme_key => $fonttheme) {
+				$html .= "<input type='hidden' id='{$fonttheme_key}' value='" . json_encode($fonttheme) . "'>";
+			}
+		}
+		$html .= '</div>';
+
 		$html .= $this->_get_custome_font_theme_list_form();
 		$html .= "<table>";
 		$html .= "<th>";
-		$html .= get_submit_button( __( 'フォントテーマを更新する', self::$text_domain ), 'primary', 'fontThemeUpdateButton');
+		$html .= get_submit_button( __( 'テーマを保存する', self::$text_domain ), 'primary', 'fontThemeUpdateButton');
 		$html .= "</th>";
 		$html .= "<th>";
-		$style = array("style"=>"margin-top:15px;".$display);
-		$html .= get_submit_button( __( 'フォントテーマを削除する', self::$text_domain ), 'delete', 'fontThemeDeleteButton', null, $style);
+		$style = array("style"=>"margin-top:15px; display:none;");
+		$html .= get_submit_button( __( 'テーマを削除する', self::$text_domain ), 'delete', 'fontThemeDeleteButton', null, $style);
 		$html .= "</th>";
 		$html .= "</table>";
 		$html .= '<input type="hidden" name="typesquare_nonce_postmeta" id="typesquare_nonce_postmeta" value="' . wp_create_nonce( plugin_basename( __FILE__ ) ) . '" />';
-		$html .= '</td></tr>';
-		$html .= '</tbody>';
-		$html .= '</table>';
 		$html .= '</form>';
 		return $html;
 	}
 
-	public function _get_custome_font_theme_list_form() {
-		$options = get_option( 'typesquare_custom_theme' );
-		$current = get_option('typesquare_fonttheme');
-		$edit_theme = false;
-		$hidden = ' hidden';
-		$require = '';
-		if ( isset( $_POST['typesquare_fonttheme'] ) && isset( $_POST['ts_change_edit_theme'] ) ) {
-			$edit_theme = esc_attr( $_POST['typesquare_fonttheme']['font_theme'] );
-			$hidden = ' hidden';
-		}else if($current['font_theme'] && $current['font_theme'] !== 'false'){
-			$edit_theme = $current['font_theme'];
-		}
-		$fonts = TypeSquare_ST_Fonts::get_instance();
-		/* @TODO Debug Code
-			$option_name = 'typesquare_fonttheme';
-			$param = get_option( $option_name );
-			unset($param['fonts']);
-			update_option( $option_name, $param );
-			$param = $fonts->get_fonttheme_options();
-			*/
-		$edit_mode = '';
-		if( isset( $_POST['ts_edit_mode'] ) ) {
-			$edit_mode = $_POST['ts_edit_mode'];
-		}
-		$font_list = $theme_id = $theme_name = '';
-		if ( $edit_theme && $options['theme'][ $edit_theme ] ) {
-			$theme_name = $options['theme'][ $edit_theme ]['name'];
-			$theme_id = $options['theme'][ $edit_theme ]['id'];
-			$font_list = $options['fonts'][ $edit_theme ];
-			$hidden = ' ';
-			$edit_mode = 'update';
-		}
+	private function _get_custome_font_theme_list_form() {
 		$html  = '';
-		if ( $theme_id ) {
-			$theme_input = "<input type='hidden'　id='ts_custome_theme_id' name='typesquare_custom_theme[id]' value='{$theme_id}' />";
-			$html .= "<input type='hidden' name='ts_edit_mode' value='update' />";
-			$html .= $theme_input;
-		} else {
-			$theme_id = uniqid();
-			$theme_input = false;
-			$html .= "<input type='hidden' name='ts_edit_mode' value='update' />";
-			if(!$edit_theme || !$edit_mode || $edit_theme === 'false' || $edit_mode === 'delete' || $edit_mode === 'update'){
-				$theme_id = '';
-			}
-			if($theme_id !== ''){
-				$html .= "<input type='hidden' id='ts_custome_theme_id' name='typesquare_custom_theme[id]' value='{$theme_id}' maxlength='16' style='width:100%;' pattern='^[0-9A-Za-z]+$' required/>";
-			}else {
-				$html .= '<input type="hidden" name="ts_custome_theme_id" id="typesquare_custom_theme[id]" value="' . wp_create_nonce( plugin_basename( __FILE__ ) ) . '" />';
-			}
-		}
-		if($edit_mode === 'new'){
-			$hidden = ' ';
-		}
-		if($edit_theme === 'new'){
-			$hidden = ' ';
-		}
-		if(!$edit_theme || !$edit_mode || $edit_theme === 'false' || $edit_mode === 'delete'){
-			$hidden = ' hidden';
-		}
-		if($hidden === ' '){
-			$require = 'required';
-		}
-		$html .= '<hr/>';
-		$html .= "<div id='customeFontThemeForm'{$hidden}>";
+		$html .= "<input type='hidden' name='ts_edit_mode' value='new' />";
+		$html .= '<input type="hidden" id="ts_custome_theme_id" name="typesquare_custom_theme[id]" value="' . uniqid() . '" />';
+		$html .= "<div id='customeFontThemeForm'>";
 		$html .= wp_nonce_field( 'ts_update_font_name_setting', 'ts_update_font_name_setting', true , false );
 		$html .= "<table class='widefat' style='border: 0px'>";
 		$html .= '<tbody>';
-		$html .= "<tr><th width='20%''>テーマタイトル</th><td>";
-		$html .= "<input type='hidden' id='current_custome_font_name' value='{$theme_name}'/>";
-		$html .= "<input type='text' id='custome_font_name' name='typesquare_custom_theme[name]' value='{$theme_name}' maxlength='16' style='width:30%;' {$require}/>";
+		$html .= "<tr><th width='240px' style='padding-left:0;'>テーマタイトル</th><td>";
+		$html .= "<input type='hidden' id='current_custome_font_name' name='typesquare_custom_theme[name]' value=''/>";
+		$html .= "<input type='text' id='custome_font_name' name='typesquare_custom_theme[name]' value='' maxlength='16' style='width:50%;' required/>";
 		$html .= '</td></tr>';
+		$html .= $this->_get_site_font_form_tr("見出し", "", "typesquare_custom_theme[fonts][title][type]");
+		$html .= $this->_get_site_font_form_tr("リード", "", "typesquare_custom_theme[fonts][lead][type]");
+		$html .= $this->_get_site_font_form_tr("本文", "", "typesquare_custom_theme[fonts][text][type]");
+		$html .= $this->_get_site_font_form_tr("太字", "", "typesquare_custom_theme[fonts][bold][type]");
 		$html .= '</tbody>';
 		$html .= '</table>';
 		$html .= "<div id='ts-react-search-font'></div>";
 		$html .= "</div>";
+		$font_list = array();
 		$html .= $this->_get_script( $font_list );
+		return $html;
+	}
+
+	private function _get_site_font_form() {
+		$fonts = TypeSquare_ST_Fonts::get_instance();
+		$value = $fonts->get_site_font_setting();
+		$html = "<form method='post' action='' id='siteFontForm'>";
+		$html .= '<p>タイトルなど、ウェブサイト共通部分のフォント設定です</p>';
+		$html .= '<table class="widefat form-table">';
+		$html .= '<tbody>';
+		$html .= $this->_get_site_font_form_tr("サイトタイトル", $value['title_fontname'], "title_fontname");
+		$html .= $this->_get_site_font_form_tr("サイトキャッチコピー", $value['catchcopy_fontname'], "catchcopy_fontname");
+		$html .= $this->_get_site_font_form_tr("ウィジェットタイトル", $value['widget_title_fontname'], "widget_title_fontname");
+		$html .= $this->_get_site_font_form_tr("ウィジェット", $value['widget_fontname'], "widget_fontname");
+		$html .= '</tbody>';
+		$html .= "</table>";
+		$html .= get_submit_button( __( 'サイトフォント設定を保存する', self::$text_domain ) );
+		$html .= wp_nonce_field( 'ts_update_site_font_settings' , 'ts_update_site_font_settings' , true , false );
+		$html .= '</form>';
+		return $html;
+	}
+
+	private function _get_site_font_form_tr ($title, $value, $input_name) {
+		$html = "<tr><th style='padding-left:0;'><span>{$title}</span></th>";
+		$html .= '<td class="font_table_td">';
+		$html .= '<div class="w_font_select">';
+		$html .= "<input class='fontlist_input' autocomplete='off' value='{$value}' style='font-family: {$value}' placeholder='未設定'/>";
+		$html .= "<div class='w_fontlist b_def_fontlist'></div>";
+		$html .= "</div>";
+		$html .= "</td><input value='{$value}' type='hidden' name='{$input_name}' id='fontlist_select' class='fontlist_select'/></tr>";
 		return $html;
 	}
 
@@ -395,58 +573,133 @@ EOM;
 		return $font_text;
 	}
 
-	public function get_font_target_form() {
+	private function _get_font_target_form() {
 		$fonts = TypeSquare_ST_Fonts::get_instance();
-		$param = $fonts->get_fonttheme_params();
-		$html  = '';
-		$html .= "<form method='post' action=''>";
-		$html .= '<h3>'. __( 'フォント設定クラス' , self::$text_domain ). '</h3>';
-		$html .= '<p>'. __( 'フォントを適用するクラスを指定します。' , self::$text_domain ). '</p>';
+		$array_input = $fonts->get_font_pro_setting();
+		$html = "<div class='b__font_target_form'>";
 		$html .= "<table class='widefat form-table'>";
 		$html .= '<thead>';
-		$key = $param['typesquare_themes_keys'];
-		$html .= "<tr><th>　{$key['title_target']}</th><th>　{$key['lead_target']}</th><th>　{$key['text_target']}</th><th>　{$key['bold_target']}</th></tr>";
+		$html .= "<tr><th style='width: 25%; padding-left: 45px;'>フォント選択</th><th style='width: 75%; padding-left: 14px;'>適用箇所(CSSセレクターで指定)</th></tr>";
 		$html .= '</thead>';
-		$html .= '<tbody>';
-		$data = $param['typesquare_themes'];
-		$html .= "<tr><td><input type='text' name='typesquare_fonttheme[title_target]' value='{$data['title_target']}' required/></td>";
-		$html .= "<td><input type='text' name='typesquare_fonttheme[lead_target]' value='{$data['lead_target']}' required/></td>";
-		$html .= "<td><input type='text' name='typesquare_fonttheme[text_target]' value='{$data['text_target']}' required/></td>";
-		$html .= "<td><input type='text' name='typesquare_fonttheme[bold_target]' value='{$data['bold_target']}' required/></td></tr>";
-		$html .= "<tr><td>";
-		$html .= get_submit_button( __( '設定クラスを更新する', self::$text_domain ) );
+		$html .= "<tbody class='cls_tb'>";
+
+		if( !empty( $array_input )) {
+			$i = 0;
+			foreach($array_input as $key => $value){
+				$i++;
+				$html .= "<tr id='font_setting'><td>";
+				$html .= "<div class='cls_delete_btn cls_delete_btn_selected'>×</div>";
+				$html .= "<input id='fontlist_input' class='fontlist_input' autocomplete='off' value='{$value['fontlist_fontname']}' style='font-family: {$value['fontlist_fontname']}'/>";
+				$html .= "<div class='w_fontlist b_def_fontlist'></div>";
+				$html .= "</td>";
+				$html .= "<td class='add_class_td'><input type='text' class='class_input' value=''/><button type='button' id='add_box' class='add_box'>追加</button>";
+
+				$cls_name = $value['fontlist_cls'];
+				foreach($cls_name as $cls_value){
+					$html .= "<p class='add_class_label'>{$cls_value}　×";
+					$html .= "<input name='fontlist_cls{$i}[]' type='hidden' value='{$cls_value}' />";
+					$html .= "</p>";
+				};
+
+				$html .= "</td>";
+				$html .= "<input value='{$value['fontlist_fontname']}' type='hidden' name='fontlist_fontname{$i}' id='fontlist_select' class='fontlist_select'/>";
+				$html .= "</tr>";
+			};
+		} else {
+			$html .= "<tr id='font_setting'><td>";
+			$html .= "<div class='cls_delete_btn cls_delete_btn_selected'>×</div>";
+			$html .= "<input id='fontlist_input' class='fontlist_input' autocomplete='off' placeholder='未設定'>";
+			$html .= "<div class='w_fontlist'><ul class='font_select_menu'></ul></div>";
+			$html .= "</td>";
+			$html .= "<td class='add_class_td'><input type='text' class='class_input' value=''/><button type='button' id='add_box' class='add_box'>追加</button></td>";
+			$html .= "<input value='' type='hidden' name='fontlist_fontname1' id='fontlist_select' class='fontlist_select'/>";
+			$html .= "</tr>";
+		};
+
+		$html .= "<tr id='addbtn_tr'><td>";
+		$html .= "<button type='button' id='input_add_btn'>+</button>";
 		$html .= "</td></tr>";
 		$html .= '</tbody>';
 		$html .= '</table>';
-		$html .= wp_nonce_field( 'ts_update_font_settings' , 'ts_update_font_settings' , true , false );
-		$html .= '</form>';
+		$html .= '</div>';
+		$html .= wp_nonce_field( 'ts_update_font_pro_settings' , 'ts_update_font_pro_settings' , true , false );
 		return $html;
 	}
 
-	public function update_font_list_form() {
+	//フォント自動読み込み設定
+	private function _get_auto_load_font_form(){
+		$option_name = 'typesquare_fonttheme';
 		$fonts = TypeSquare_ST_Fonts::get_instance();
-		$auth_param = $this->get_auth_params();
-		if ( false == $auth_param['typesquare_auth']['api_status'] ) {
-			return;
+		$param = $fonts->get_fonttheme_params();
+		$keys = $param['typesquare_themes_keys'];
+		$html .= "<tr><th>{$keys['auto_load_font']}</th><td>";
+		$value = esc_attr( $param['typesquare_themes']['auto_load_font'] );
+		if ( $value ) {
+			$optional = 'checked';
 		}
+		$html .="<label class='switch__label'><input  name='{$option_name}[auto_load_font]'type='checkbox' class='switch__input' id='auto_load_font' value='1' ". checked( $value, true, false ). "/><span class='switch__content'></span><span class='switch__circle'></span></label><span>有効化する</span>";
+		$html .= '</td></tr>';
+
+		return $html;
+	}
+
+	// 疑似要素フォント読込
+	private function _get_apply_to_pseudo_form() {
+		$option_name = 'typesquare_fonttheme';
+		$fonts = TypeSquare_ST_Fonts::get_instance();
+		$param = $fonts->get_fonttheme_params();
+		$keys = $param['typesquare_themes_keys'];
+		$html .= "<tr><th>{$keys['apply_to_pseudo']}</th><td>";
+		$value = esc_attr( $param['typesquare_themes']['apply_to_pseudo'] );
+		if ( $value ) {
+			$optional = 'checked';
+		}
+		$html .="<label class='switch__label'><input  name='{$option_name}[apply_to_pseudo]'type='checkbox' class='switch__input' id='apply_to_pseudo' value='1' ". checked( $value, true, false ). "/><span class='switch__content'></span><span class='switch__circle'></span></label><span>有効化する</span>";
+		$html .= '</td></tr>';
+
+		return $html;
+	}
+
+	// 非表示要素フォント読込
+	private function _get_apply_to_hidden_form() {
+		$option_name = 'typesquare_fonttheme';
+		$fonts = TypeSquare_ST_Fonts::get_instance();
+		$param = $fonts->get_fonttheme_params();
+		$keys = $param['typesquare_themes_keys'];
+		$html .= "<tr><th>{$keys['apply_to_hidden']}</th><td>";
+		$value = esc_attr( $param['typesquare_themes']['apply_to_hidden'] );
+		if ( $value ) {
+			$optional = 'checked';
+		}
+		$html .="<label class='switch__label'><input  name='{$option_name}[apply_to_hidden]'type='checkbox' class='switch__input' id='apply_to_hidden' value='1' ". checked( $value, true, false ). "/><span class='switch__content'></span><span class='switch__circle'></span></label><span>有効化する</span>";
+		$html .= '</td></tr>';
+
+		return $html;
+	}
+
+	private function _update_font_list_form() {
+		$fonts = TypeSquare_ST_Fonts::get_instance();
 		$font_file_path = path_join( TS_PLUGIN_PATH , 'inc/font.json' );
-		$param = date("y/m/d", filemtime($font_file_path));
+		$settings_timezone = get_option('timezone_string');
+		date_default_timezone_set($settings_timezone);
+		$param = date("y/m/d H:i:s", filemtime($font_file_path));
 		$html  = '';
-		$html .= "<form method='post' action=''>";
-		$html .= '<h3>'. __( 'フォント一覧の更新' , self::$text_domain ). '</h3>';
-		$html .= '<p>'. __( '利用可能フォントの一覧を最新版に更新します。' , self::$text_domain ). '</p>';
+		$html .= '<div class="block_wrap">';
+		$html .= '<div>';
+		$html .= '<h3 class="block_title">'. __( 'フォントリストの更新' , self::$text_domain ). '</h3>';
+		$html .= '</div>';
 		$html .= "<table class='widefat form-table'>";
 		$html .= '<thead>';
 		$html .= "<tr></tr>";
 		$html .= '</thead>';
 		$html .= "<tbody>";
-		$html .= "<tr><td style='width: 1%;'>".get_submit_button( __( 'フォント一覧を更新する', self::$text_domain ) )."</td>";
-		$html .= "<td>最終更新日: ".$param."</td></tr>";
+		$html .= "<tr><td style='width: 1%;' class='fontlist_update'>".get_submit_button( __( 'フォントリスト更新', self::$text_domain ), null, 'updateFontListButton', null)."</td>";
+		$html .= "<td class='update_msg'>最終更新日: ".$param."</td></tr>";
 		$html .= '</tbody>';
 		$html .= '</table>';
+		$html .= '<input type="hidden" name="update_font_list" id="update_font_list" value="off" />';
 		$html .= wp_nonce_field( 'ts_update_font_list' , 'ts_update_font_list' , true , false );
-		$html .= '</form>';
+		$html .= '</div>';
 		return $html;
 	}
-
 }

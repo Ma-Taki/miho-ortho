@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name:       Protect Uploads
- * Plugin URI:        http://www.alticreation.com/en/protect-uploads/
+ * Plugin URI:        https://www.alticreation.com/en/protect-uploads/
  * Description:       Protect your uploads directory. Avoid browsing of your uploads directory by adding a htaccess file or an index.php file.
- * Version:           0.2
+ * Version:           0.3
  * Author:            Alexis Blondin
- * Author URI:        http://www.alticreation.com
+ * Author URI:        https://www.alticreation.com
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       protect-uploads

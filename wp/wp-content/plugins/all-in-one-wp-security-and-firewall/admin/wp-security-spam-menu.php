@@ -125,7 +125,7 @@ class AIOWPSecurity_Spam_Menu extends AIOWPSecurity_Admin_Menu
         <div class="inside">
         <div class="aio_blue_box">
             <?php
-            echo '<p>'.__('This feature will add a simple math captcha field in the WordPress comments form.', 'all-in-one-wp-security-and-firewall').
+            echo '<p>'.__('This feature will add a captcha field in the WordPress comments form.', 'all-in-one-wp-security-and-firewall').
             '<br />'.__('Adding a captcha field in the comment form is a simple way of greatly reducing SPAM comments from bots without using .htaccess rules.', 'all-in-one-wp-security-and-firewall').'</p>';
             ?>
         </div>
@@ -157,7 +157,8 @@ class AIOWPSecurity_Spam_Menu extends AIOWPSecurity_Admin_Menu
         <?php
         //Display security info badge
         $aiowps_feature_mgr->output_feature_details_badge("block-spambots");
-        if (AIOWPSecurity_Utility::is_multisite_install() && get_current_blog_id() != 1)
+        $blog_id = get_current_blog_id(); 
+        if (AIOWPSecurity_Utility::is_multisite_install() && !is_main_site( $blog_id ))
         {
            //Hide config settings if MS and not main site
            AIOWPSecurity_Utility::display_multisite_message();
@@ -372,7 +373,7 @@ class AIOWPSecurity_Spam_Menu extends AIOWPSecurity_Admin_Menu
                 <?php
                 echo '<p>'.__('This section displays a list of the IP addresses of the people or bots who have left SPAM comments on your site.', 'all-in-one-wp-security-and-firewall').'
                 <br />'.__('This information can be handy for identifying the most persistent IP addresses or ranges used by spammers.', 'all-in-one-wp-security-and-firewall').'
-                <br />'.__('By inspecting the IP address data coming from spammers you will be in a better position to determine which addresses or address ranges you should block by adding them to your blacklist.', 'all-in-one-wp-security-and-firewall').'
+                <br />'.__('By inspecting the IP address data coming from spammers you will be in a better position to determine which addresses or address ranges you should block by adding them to the permanent block list.', 'all-in-one-wp-security-and-firewall').'
                 <br />'.__('To add one or more of the IP addresses displayed in the table below to your blacklist, simply click the "Block" link for the individual row or select more than one address
                             using the checkboxes and then choose the "block" option from the Bulk Actions dropdown list and click the "Apply" button.', 'all-in-one-wp-security-and-firewall').'
             </p>';
@@ -526,7 +527,7 @@ class AIOWPSecurity_Spam_Menu extends AIOWPSecurity_Admin_Menu
         <div class="aio_blue_box">
             <?php
             echo '<p>'.__('This feature will add a simple math captcha field in the BBPress new topic form.', 'all-in-one-wp-security-and-firewall').
-            '<br />'.__('Adding a captcha field in the this form is a simple way of greatly reducing SPAM submitted from bots.', 'all-in-one-wp-security-and-firewall').'</p>';
+            '<br />'.__('Adding a captcha field in this form is a simple way of greatly reducing SPAM submitted from bots.', 'all-in-one-wp-security-and-firewall').'</p>';
             ?>
         </div>
         <?php

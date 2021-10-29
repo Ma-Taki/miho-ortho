@@ -1,4 +1,5 @@
 <?php
+require_once(ABSPATH.'wp-admin/includes/file.php');
 
 class TypeSquare_ST_Fonttheme {
 	private static $fonttheme;
@@ -17,87 +18,29 @@ class TypeSquare_ST_Fonttheme {
 	public static function get_fonttheme() {
 		static $fonttheme;
 
-		$fonttheme = array(
-			'basic' => array(
-				'name'	=> 'ベーシック',
-				'fonts' => array(
-					'title'   => '見出ゴMB31',
-					'lead'    => 'カクミン R',
-					'content' => '新ゴ R',
-					'bold'    => '新ゴ M',
-				),
-			),
-			'news' => array(
-				'name'	=> 'ニュース',
-				'fonts' => array(
-					'title'   => 'ゴシックMB101 B',
-					'lead'    => 'カクミン R',
-					'content' => 'UD新ゴ R',
-					'bold'    => 'UD新ゴ M',
-				),
-			),
-			'fashion' => array(
-				'name'	=> 'ファッション',
-				'fonts' => array(
-					'title'   => '解ミン 宙 B',
-					'lead'    => '丸フォーク M',
-					'content' => 'フォーク R',
-					'bold'    => 'フォーク M',
-				),
-			),
-			'pop' => array(
-				'name'	=> 'ポップ',
-				'fonts' => array(
-					'title'   => '新丸ゴ 太ライン',
-					'lead'    => 'はるひ学園',
-					'content' => 'じゅん 201',
-					'bold'    => 'じゅん 501',
-				),
-			),
-			'japan_style' => array(
-				'name'	=> '和風',
-				'fonts' => array(
-					'title'   => '隷書101',
-					'lead'    => '正楷書CB1',
-					'content' => 'リュウミン R-KL',
-					'bold'    => 'リュウミン M-KL',
-				),
-			),
-			'modern' => array(
-				'name'	=> 'モダン',
-				'fonts' => array(
-					'title'   => 'すずむし',
-					'lead'    => 'トーキング',
-					'content' => 'ナウ-GM',
-					'bold'    => 'ナウ-GM',
-				),
-			),
-			'novels' => array(
-				'name'	=> '小説',
-				'fonts' => array(
-					'title'   => '見出ミンMA31',
-					'lead'    => '解ミン 宙 B',
-					'content' => 'A1明朝',
-					'bold'    => 'A1明朝',
-				),
-			),
-			'smartphone' => array(
-				'name'	=> 'スマホ',
-				'fonts' => array(
-					'title'   => 'UD新ゴ M',
-					'lead'    => '新丸ゴ R',
-					'content' => 'UD新ゴ コンデンス90 L',
-					'bold'    => 'UD新ゴ コンデンス90 M',
-				),
-			),
-		);
+		$arr = array();
+		$path_name = path_join( TS_PLUGIN_PATH , 'inc/assets/json/data.json' );
+		if(WP_Filesystem()){
+			global $wp_filesystem;
+			$arr = $wp_filesystem->get_contents($path_name);
+		}
+		$arr = json_decode( $arr , true ) ;
 
 		$options = get_option( 'typesquare_custom_theme' );
 		if ( $options && isset( $options['theme'] ) && is_array( $options['theme'] ) ) {
-			$fonttheme = $fonttheme + $options['theme'];
+			$arr = $arr['fonttheme'] + $options['theme'];
 		}
-		return $fonttheme;
+		return $arr;
 	}
+
+	public static function  get_custom_fonttheme() {
+		$options = get_option( 'typesquare_custom_theme' );
+		if ( $options && isset( $options['theme'] ) && is_array( $options['theme'] ) ) {
+			return $options['theme'];
+		}
+		return null;
+	}
+
 
 	public static function get_custom_theme_json() {
 		$options = get_option( 'typesquare_custom_theme' );

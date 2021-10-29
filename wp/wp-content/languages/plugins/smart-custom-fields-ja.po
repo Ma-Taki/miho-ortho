@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Smart Custom Fields - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-09-20 12:29:53+0000\n"
+"PO-Revision-Date: 2020-01-06 02:11:20+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -98,7 +98,7 @@ msgstr "もしキーと値を分けたい場合は次のように入力してく
 #: classes/fields/class.field-textarea.php:90
 #: classes/fields/class.field-wysiwyg.php:132
 msgid "Instruction"
-msgstr "説明文"
+msgstr "手順"
 
 #: classes/controller/class.option.php:57
 msgid "Save settings"
@@ -114,15 +114,11 @@ msgstr "オプションページ"
 
 #: classes/fields/class.field-textarea.php:71
 msgid "Rows"
-msgstr "行数"
+msgstr "行"
 
 #: smart-custom-fields.php:181
 msgid "New Field"
 msgstr "新規フィールド"
-
-#: smart-custom-fields.php:182
-msgid "Edit Field"
-msgstr "フィールド編集"
 
 #: smart-custom-fields.php:183
 msgid "View Field"
@@ -163,6 +159,10 @@ msgstr "inc2734"
 #. Author URI of the plugin/theme
 msgid "https://2inc.org"
 msgstr "https://2inc.org"
+
+#: smart-custom-fields.php:182
+msgid "Edit Field"
+msgstr "フィールドを編集"
 
 #: classes/models/class.group.php:135
 msgid "Group name"
@@ -219,7 +219,7 @@ msgstr "さらに読み込む"
 
 #: classes/fields/class.field-select.php:21
 msgid "Select"
-msgstr "セレクトボックス"
+msgstr "選択"
 
 #: classes/fields/class.field-image.php:94
 msgid "Image Select"
@@ -236,7 +236,7 @@ msgstr "ラジオボタン"
 #: classes/fields/class.field-related-posts.php:239
 #: classes/fields/class.field-related-terms.php:216
 msgid "Search..."
-msgstr "検索 …"
+msgstr "検索…"
 
 #: classes/fields/class.field-file.php:100
 msgid "File Select"
@@ -281,11 +281,7 @@ msgstr "日付ピッカー"
 #: classes/fields/class.field-datepicker.php:140
 #: classes/fields/class.field-datetime-picker.php:156
 msgid "Date Format"
-msgstr "日付のフォーマット"
-
-#: classes/fields/class.field-check.php:21
-msgid "Check"
-msgstr "チェックボックス"
+msgstr "日付形式"
 
 #: classes/fields/class.field-check.php:89
 #: classes/fields/class.field-radio.php:88
@@ -312,6 +308,10 @@ msgstr "垂直方向"
 msgid "Color picker"
 msgstr "カラーピッカー"
 
+#: classes/fields/class.field-check.php:21
+msgid "Check"
+msgstr "チェック"
+
 #: classes/fields/class.field-boolean.php:110
 msgid "TRUE Label"
 msgstr "TRUE ラベル"
@@ -336,7 +336,7 @@ msgstr "FALSE ラベル"
 #: classes/fields/class.field-textarea.php:97
 #: classes/fields/class.field-wysiwyg.php:139
 msgid "Notes"
-msgstr "注記"
+msgstr "メモ"
 
 #: classes/fields/class.field-boolean.php:85
 #: classes/fields/class.field-check.php:119
@@ -354,10 +354,6 @@ msgstr "デフォルト"
 msgid "No"
 msgstr "いいえ"
 
-#: classes/controller/class.settings.php:380
-msgid "Roles"
-msgstr "権限"
-
 #: classes/controller/class.settings.php:409
 #: classes/fields/class.field-related-terms.php:240
 msgid "Taxonomies"
@@ -370,6 +366,10 @@ msgstr "真偽値"
 #: classes/fields/class.field-boolean.php:38
 msgid "Yes"
 msgstr "はい"
+
+#: classes/controller/class.settings.php:380
+msgid "Roles"
+msgstr "権限グループ"
 
 #: classes/controller/class.settings.php:282
 msgid "Add Sub field"

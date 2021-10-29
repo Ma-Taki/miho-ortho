@@ -1,10 +1,11 @@
 === Protect uploads ===
 Contributors: alticreation
-Donate link: http://www.alticreation.com/en/protect-uploads/
+Donate link: https://www.alticreation.com/en/protect-uploads/
 Tags: uploads, protection, images protection, browsing images, uploads folder, image folder, avoid browsing folder, hide uploads, prevent uploads browsing, prevent images browsing, protect library, library
 Requires at least: 3.0.1
-Tested up to: 4.7.4
-Stable tag: 0.2
+Tested up to: 5.4.1
+Requires PHP: 5.0
+Stable tag: 0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,7 +24,7 @@ Available languages :
 * Español
 * Italian (thanks to Marko97)
 
-For support, please visit [protect uploads plugin](http://www.alticreation.com/en/protect-uploads/ "protect uploads plugin for Wordpress by alticreation")
+For support, please visit [protect uploads plugin](https://www.alticreation.com/en/protect-uploads/ "protect uploads plugin for Wordpress by alticreation")
 
 == Installation ==
 
@@ -35,7 +36,7 @@ Note : GD library is needed and being able to create a .htaccess file in uploads
 == Frequently Asked Questions ==
 
 = Support =
-You can ask question and read documentation at [protect uploads plugin](http://www.alticreation.com/en/protect-uploads/ "protect uploads plugin for Wordpress by alticreation")
+You can ask question and read documentation at [protect uploads plugin](https://www.alticreation.com/en/protect-uploads/ "protect uploads plugin for Wordpress by alticreation")
 
 == Screenshots ==
 
@@ -55,3 +56,10 @@ Nothing for now
 * Add sidebar for admin page
 * Add Italian translation (thanks to Marko97).
 * Try to fix the wrong message saying that Protection is disabled eventhough it is actually working.
+
+= 0.3 =
+* Simplify UI admin.
+* check presence of index.html.
+* Remove option value managing current protection status.
+* Reorganizing code and making it more modular and simple.
+* Remove useless pieces.

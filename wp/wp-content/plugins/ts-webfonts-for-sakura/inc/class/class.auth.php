@@ -23,13 +23,42 @@ class TypeSquare_ST_Auth {
 		return $text_domain;
 	}
 
-	public function get_auth_params() {
-
-		$param = array();
-		$param['typesquare_auth'] = array(
-			'auth_status' => true,
-		);
-
-			return $param;
+	public function get_auth_status() {
+		$option_name = 'typesquare_auth';
+		$param = get_option( $option_name );
+		if ( !$param ) {
+			$param = array(
+				'typesquare_id' => 'SAKURA',
+				'fontThemeUseType' => 1
+			);
 		}
+		foreach ( $param as $key => $value ) {
+			$escaped_data[ $key ] = esc_attr( $value );
+		}
+		return $escaped_data;
 	}
+
+	public function get_auth_params() {
+		$option_name = 'typesquare_auth';
+		$param['typesquare_auth'] = $this->get_auth_status();
+
+		$param['typesquare_auth_keys'] = array(
+			'typesquare_id' => __( '配信タグ設定', self::$text_domain ),
+		);
+		return $param;
+	}
+
+	public function update_typesquare_auth() {
+		$typesquare_auth = $this->get_auth_status();
+
+		if (isset($_POST['typesquare_auth']['typesquare_id'])) {
+			$typesquare_auth['typesquare_id'] = esc_attr($_POST['typesquare_auth']['typesquare_id']);
+		}
+
+		if (isset($_POST['fontThemeUseType'])) {
+			$typesquare_auth['fontThemeUseType'] = esc_attr($_POST['fontThemeUseType']);
+		}
+
+		update_option( 'typesquare_auth', $typesquare_auth );
+	}
+}

@@ -1,312 +1,316 @@
 <?php
 
-class Alti_ProtectUploads_Admin {
+class Alti_ProtectUploads_Admin
+{
 
 	private $plugin_name;
 	private $version;
 	private $messages = array();
 
-	/**
-	 * constructor
-	 * @param string $plugin_name
-	 * @param string $version
-	 */
-	public function __construct( $plugin_name, $version ) {
+	public function __construct($plugin_name, $version)
+	{
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 	}
 
-	public function get_plugin_name() {
+	public function get_plugin_name()
+	{
 		return $this->plugin_name;
 	}
 
-	/**
-	 * Add submenu to left page in admin
-	 */
-	public function add_submenu_page() {
-		add_submenu_page( 'upload.php', $this->plugin_name, 'Protect Uploads <span class="dashicons dashicons-shield-alt" style="font-size:15px;"></span>', 'manage_options', $this->plugin_name . '-settings-page', array($this, 'render_settings_page') );
+	public function add_submenu_page()
+	{
+		add_submenu_page('upload.php', $this->plugin_name, 'Protect Uploads <span class="dashicons dashicons-shield-alt" style="font-size:15px;"></span>', 'manage_options', $this->plugin_name . '-settings-page', array($this, 'render_settings_page'));
 	}
 
-	/**
-	 * Render settings page for plugin
-	 */
-	public function render_settings_page() {
-		require plugin_dir_path( __FILE__ ) . 'views/' . $this->plugin_name . '-admin-settings-page.php';
+	public function render_settings_page()
+	{
+		require plugin_dir_path(__FILE__) . 'views/' . $this->plugin_name . '-admin-settings-page.php';
 	}
 
-	/**
-	 * prepare enqueue styles for wordpress hook
-	 */
-	public function enqueue_styles() {
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/css/protect-uploads-admin.css', array(), $this->version, 'all' );
+	public function enqueue_styles()
+	{
+		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'assets/css/protect-uploads-admin.css', array(), $this->version, 'all');
 	}
 
-	/**
-	 * prepare enqueue scripts for wordpress hook
-	 */
-	public function enqueue_scripts() {
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/js/protect-uploads-admin.js', array( 'jquery' ), $this->version, false );
+	public function add_settings_link($links)
+	{
+		$settings_link = '<a href="upload.php?page=' . $this->plugin_name . '-settings-page">' . __('Settings') . '</a>';
+		array_unshift($links, $settings_link);
+		return $links;
 	}
 
-	/**
-	 * add a settings link to plugin page.
-	 * @param string $links array of links
-	 */
-	public function add_settings_link( $links ) {
-	    $settings_link = '<a href="upload.php?page=' . $this->plugin_name . '-settings-page">' . __( 'Settings' ) . '</a>';
-	    array_unshift($links, $settings_link);
-	  	return $links;
-	}
-
-	/**
-	 * get uploads dir
-	 * @return string return path
-	 */
-	public function get_uploads_dir() {
+	public function get_uploads_dir()
+	{
 		$uploads_dir = wp_upload_dir();
 		return $uploads_dir['basedir'];
 	}
 
-	/**
-	 * get uploads folder url
-	 * @return string return full url
-	 */
-	public function get_uploads_url() {
+	public function get_uploads_url()
+	{
 		$uploads_dir = wp_upload_dir();
 		return $uploads_dir['baseurl'];
 	}
 
-	public function get_uploads_subdirectories() {
+	public function get_uploads_subdirectories()
+	{
 
-		$directories = scandir( self::get_uploads_dir() );
-		$subs = array( self::get_uploads_dir() );
+		$directories = scandir(self::get_uploads_dir());
+		$subs = array(self::get_uploads_dir());
 
 		foreach ($directories as $directory) {
 
-			if(is_dir(self::get_uploads_dir() . '/' . $directory) && !preg_match('/^\.*$/', $directory)) {
+			if (is_dir(self::get_uploads_dir() . '/' . $directory) && !preg_match('/^\.*$/', $directory)) {
 				$subs[] = self::get_uploads_dir() . '/' . $directory;
-				$subDirectories = scandir( self::get_uploads_dir() . '/' . $directory );
+				$subDirectories = scandir(self::get_uploads_dir() . '/' . $directory);
 				foreach ($subDirectories as $subDirectory) {
-					if(is_dir(self::get_uploads_dir() . '/' . $directory . '/' . $subDirectory) && !preg_match('/^\.*$/', $subDirectory)) $subs[] = self::get_uploads_dir() . '/' . $directory . '/' . $subDirectory;
+					if (is_dir(self::get_uploads_dir() . '/' . $directory . '/' . $subDirectory) && !preg_match('/^\.*$/', $subDirectory)) $subs[] = self::get_uploads_dir() . '/' . $directory . '/' . $subDirectory;
 				}
 			}
-
 		}
 		return $subs;
-
 	}
 
-	/**
-	 * saving form
-	 */
-	public function save_form( $form ) {
-		if( $form['protection'] == 'index_php' ) { $this->remove_htaccess(); $this->create_index(); }
-		if( $form['protection'] == 'htaccess' )  { $this->remove_index(); $this->create_htaccess(); }
-		if( $form['protection'] == 'remove' )    { $this->remove_index(); $this->remove_htaccess(); }
+	public function save_form($form)
+	{
+		if ($form['protection'] == 'index_php') {
+			$this->create_index();
+		}
+		if ($form['protection'] == 'htaccess') {
+			$this->create_htaccess();
+		}
+		if ($form['protection'] == 'remove') {
+			$this->remove_index();
+			$this->remove_htaccess();
+		}
 	}
 
+	// used to check if the current htaccess has been generated by the plugin
+	public function get_htaccess_identifier()
+	{
+		return "[plugin_name=" . $this->plugin_name . "]";
+	}
 
-	/**
-	 *
-	 */
-	public function create_index() {
+	public function create_index()
+	{
 		// check if index php does not exists
-		if(!file_exists( self::get_uploads_dir() .'/index.php' )) {
+		if (self::check_protective_file('index.php') === false) {
 
-			$indexContent = "<!-- \n Generated by " . $this->get_plugin_name() . " \n http://www.alticreation.com/en/protect-uploads/ \n date:" . date('d/m/Y') . "\n--><?php // Silence is golden";
+			$indexContent = "<?php // Silence is golden \n // " . self::get_htaccess_identifier() . " \n // https://www.alticreation.com/en/protect-uploads/ \n // date:" . date('d/m/Y') . "\n // .";
 			$i = 0;
 			foreach (self::get_uploads_subdirectories() as $subDirectory) {
 
-				if( !file_put_contents( $subDirectory.'/'.'index.php', $indexContent ) ) {
-					$this->messages['file'][] = array(
-						'message' => __('Impossible to create or modified the index.php file in '. $subDirectory, $this->get_plugin_name()),
-						'type' => 'error',
-						'id' => '1'
-					);
-				}
-				else {
-					update_option( $this->get_plugin_name().'-protection', 'index_php' );
+				if (!file_put_contents($subDirectory . '/' . 'index.php', $indexContent)) {
+					self::register_message('Impossible to create or modified the index.php file in ' . $subDirectory, 'error');
+				} else {
 					$i++;
 				}
-
 			}
 
-			if($i == count(self::get_uploads_subdirectories())) {
-				$this->messages['file'][] = array(
-						'message' => __('The index.php file has been created in main folder and subfolders (two levels max).', $this->get_plugin_name()),
-						'type' => 'updated'
-					);
+			if ($i == count(self::get_uploads_subdirectories())) {
+				self::register_message('The index.php file has been created in main folder and subfolders (two levels max).');
 			}
-
 		}
 		// if index php already exists
 		else {
-			$this->messages['file'][] = array(
-				'message' => 'The index.php file already exists',
-				'type' => 'error',
-				'id' => '2'
-			);
+			self::register_message('The index.php file already exists', 'error');
 		}
 	}
 
-	/**
-	 *
-	 */
-	public function create_htaccess() {
-		// prepare htaccess Content
+	public function create_htaccess()
+	{
+		// Content for htaccess file
 		$date             = date('Y-m-d H:i.s');
 		$phpv             = phpversion();
 
 		$htaccessContent  = "\n# BEGIN " . $this->get_plugin_name() . " Plugin\n";
 		$htaccessContent  .= "\tOptions -Indexes\n";
-		$htaccessContent  .= "# [date={$date}] [php={$phpv}] [plugin_name=" . $this->plugin_name . "] [version={$this->version}]\n";
+		$htaccessContent  .= "# [date={$date}] [php={$phpv}] " . self::get_htaccess_identifier() . " [version={$this->version}]\n";
 		$htaccessContent  .= "# END " . $this->get_plugin_name() . " Plugin\n";
 
-		// check if htaccess does not exists
-		if(!file_exists( self::get_uploads_dir() .'/.htaccess' )) {
-			// if htaccess is successfuly written
-			if( !file_put_contents( self::get_uploads_dir().'/'.'.htaccess', $htaccessContent ) ) {
-				$this->messages['file'][] = array(
-					'message' => __('Impossible to create or modified the htaccess file.', $this->get_plugin_name()),
-					'type' => 'error',
-					'id' => '1'
-				);
+		// if htaccess does NOT exist yet
+		if (self::check_protective_file('.htaccess') === false) {
+			// try to create and save the new htaccess file
+			if (!file_put_contents(self::get_uploads_dir() . '/' . '.htaccess', $htaccessContent)) {
+				self::register_message('Impossible to create or modified the htaccess file.', 'error');
+			} else {
+				self::register_message('The htaccess file has been created.');
 			}
-			// if htaccess has not been written
-			else {
-				update_option( $this->get_plugin_name().'-protection', 'htaccess');
-				$this->messages['file'][] = array(
-					'message' => __('The htaccess file has been created.', $this->get_plugin_name()),
-					'type' => 'updated'
-				);
-			}
-
 		}
-		// if htaccess already exists
-		if(file_exists( self::get_uploads_dir() .'/.htaccess') && preg_match( '/(# BEGIN protect-uploads Plugin)(.*?)(# END protect-uploads Plugin)/is', file_get_contents( self::get_uploads_dir() .'/.htaccess' ) ) == 0) {
+		else {
 			// if content added to existing htaccess
-			if( file_put_contents( self::get_uploads_dir() .'/.htaccess', $htaccessContent, FILE_APPEND | LOCK_EX ) ) {
-				update_option( $this->get_plugin_name().'-protection', 'htaccess');
-				$this->messages['file'][] = array(
-					'message' => __('Existing htaccess has been updated.', $this->get_plugin_name()),
-					'type' => 'updated'
-				);
-
-			}
-			else {
-				$this->messages['file'][] = array(
-					'message' => 'The existing htaccess file couldn\'t be updated. Please check file permissions.',
-					'type' => 'error',
-					'id' => '2'
-				);
+			if (file_put_contents(self::get_uploads_dir() . '/.htaccess', $htaccessContent, FILE_APPEND | LOCK_EX)) {
+				self::register_message('The htaccess file has been updated.');
+			} else {
+				self::register_message('The existing htaccess file couldn\'t be updated. Please check file permissions.', 'error');
 			}
 		}
 	}
 
-	/**
-	 * remove index file
-	 */
-	public function remove_index() {
-
+	public function remove_index()
+	{
 		$i = 0;
-		foreach( self::get_uploads_subdirectories() as $subDirectory ) {
-			if(file_exists( $subDirectory .'/index.php' )) {
-				unlink( $subDirectory .'/index.php' );
+		foreach (self::get_uploads_subdirectories() as $subDirectory) {
+			if (file_exists($subDirectory . '/index.php')) {
+				unlink($subDirectory . '/index.php');
 				$i++;
 			}
-
 		}
-		if( $i == count(self::get_uploads_subdirectories()) ) {
-			$this->messages['file'][] = array(
-				'message' => __('The index.php file(s) have(has) been deleted.', $this->get_plugin_name()),
-				'type' => 'updated'
-			);
-			update_option( $this->get_plugin_name().'-protection', 'remove');
+		if ($i == count(self::get_uploads_subdirectories())) {
+			self::register_message('The index.php file(s) have(has) been deleted.');
 		}
-
-
 	}
 
-	/**
-	 * remove htaccess
-	 */
-	public function remove_htaccess() {
+	public function remove_htaccess()
+	{
+		if (file_exists(self::get_uploads_dir() . '/.htaccess')) {
 
-		if(file_exists( self::get_uploads_dir() .'/.htaccess' )) {
-			update_option( $this->get_plugin_name().'-protection', 'remove');
-
-			$htaccessContent = file_get_contents(self::get_uploads_dir() .'/.htaccess');
-			$htaccessContent = preg_replace( '/(# BEGIN protect-uploads Plugin)(.*?)(# END protect-uploads Plugin)/is', '', $htaccessContent );
-			file_put_contents( self::get_uploads_dir() .'/.htaccess', $htaccessContent, LOCK_EX );
+			$htaccessContent = file_get_contents(self::get_uploads_dir() . '/.htaccess');
+			$htaccessContent = preg_replace('/(# BEGIN protect-uploads Plugin)(.*?)(# END protect-uploads Plugin)/is', '', $htaccessContent);
+			file_put_contents(self::get_uploads_dir() . '/.htaccess', $htaccessContent, LOCK_EX);
 
 			// if htaccess is empty, we remove it.
-			if( strlen(preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "", file_get_contents(self::get_uploads_dir() .'/.htaccess'))) == 0) {
-				unlink( self::get_uploads_dir() .'/.htaccess' );
+			if (strlen(preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "", file_get_contents(self::get_uploads_dir() . '/.htaccess'))) == 0) {
+				unlink(self::get_uploads_dir() . '/.htaccess');
 			}
 
 
 			//
-			$this->messages['file'][] = array(
-				'message' => __('The htaccess file has been updated.', $this->get_plugin_name()),
-				'type' => 'updated'
-			);
+			self::register_message('The htaccess file has been updated.');
 		}
-
 	}
 
-	/**
-	 * check if apache is active
-	 * @return message messages
-	 */
-	public function get_current_protection() {
-		// check if header is 200 (ok)
-		$uploads_headers = @get_headers( self::get_uploads_url() . '/' );
-		if(!is_array($uploads_headers)) $uploads_headers[0] = '';
-		if( preg_match('/200/i', $uploads_headers[0] )) {
-			// because
-			if( !file_exists( self::get_uploads_dir() .'/index.php' ) ) {
-				return false;
-			}
-			else {
-				return true;
+	public function get_protective_files_array()
+	{
+		$uploads_files = ['index.php', 'index.html', '.htaccess'];
+		$response = [];
+		foreach ($uploads_files as $file) {
+			if (file_exists(self::get_uploads_dir() . '/' . $file)) {
+				$response[] = $file;
 			}
 		}
-		// check if header is 403 (forbidden)
-		if( preg_match('/403/i', $uploads_headers[0] )) {
+		return $response;
+	}
+
+	public function check_protective_file($file)
+	{
+		if (in_array($file, self::get_protective_files_array())) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function get_uploads_root_response_code()
+	{
+		$uploads_headers = get_headers(self::get_uploads_url() . '/');
+		$response = null;
+		if (is_array($uploads_headers)) {
+			if (preg_match('/200/', $uploads_headers[0])) $response = 200;
+			if (preg_match('/403/', $uploads_headers[0])) $response = 403;
+		}
+		return $response;
+	}
+
+	public function get_htaccess_content()
+	{
+		return file_get_contents(self::get_uploads_dir() . '/.htaccess');
+	}
+
+	public function check_htaccess_is_self_generated()
+	{
+		if (self::check_protective_file('.htaccess') && preg_match('/' . self::get_htaccess_identifier() . '/', self::get_htaccess_content())) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// heart? <3
+	public function check_uploads_is_protected()
+	{
+		foreach (self::get_protective_files_array() as $file) {
+			if ($file === 'index.html') {
+				return true;
+				break;
+			}
+			if ($file === 'index.php') {
+				return true;
+				break;
+			}
+			if ($file === '.htaccess' && self::get_uploads_root_response_code() === 200) {
+					return false;
+					break;
+			}
+		}
+		if (self::get_uploads_root_response_code() === 403) {
 			return true;
 		}
-
+		else {
+			return false;
+		}
 	}
 
-	/**
-	 * check if apache is active
-	 * @return message messages
-	 */
-	public function check_apache() {
+	public function check_protective_file_removable() {
+		if( self::check_protective_file('index.html') ) {
+			return false;
+		}
+		elseif( self::check_protective_file('.htaccess') === false && self::get_uploads_root_response_code() === 403 ) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
 
-		if( !function_exists('apache_get_modules')) {
-			$this->messages['apache'][] = array(
-					'message' => __('The Protect Uploads plugin cannot work without Apache. Yourself or your web host has to activate this module.', $this->plugin_name),
-					'type' => 'error',
-					'id' => '3'
-				);
+	public function get_uploads_protection_message_array()
+	{
+		$response = [];
+		foreach (self::get_protective_files_array() as $file) {
+			if ($file === '.htaccess' && self::get_uploads_root_response_code() === 403) {
+				$response[] = '<span class="dashicons dashicons-yes"></span> ' . __('.htaccess file is present and access to uploads directory returns 403 code.', $this->plugin_name);
+			}
+			if ($file === 'index.php') {
+				$response[] = '<span class="dashicons dashicons-yes"></span> ' . __('index.php file is present.', $this->plugin_name);
+			}
+			if ($file === 'index.html') {
+				$response[] = '<span class="dashicons dashicons-yes"></span> ' . __('index.html file is present.', $this->plugin_name);
+			}
+		}
+		if (self::check_protective_file('.htaccess') === true && self::get_uploads_root_response_code() === 200) {
+			$response[] = '<span class="dashicons dashicons-search"></span> ' . __('.htaccess file is present but not protecting uploads directory.', $this->plugin_name);
+		}
+		if (self::check_protective_file('.htaccess') === false && self::get_uploads_root_response_code() === 403) {
+			$response[] = '<span class="dashicons dashicons-yes"></span> ' . __('Access to uploads directory is protected (403) with a global .htaccess or another global declaration.', $this->plugin_name);
+		}
+		return $response;
+	}
+
+	public function check_apache()
+	{
+
+		if (!function_exists('apache_get_modules')) {
+			self::register_message('The Protect Uploads plugin cannot work without Apache. Yourself or your web host has to activate this module.');
 		}
 	}
 
 
+	public function register_message($message, $type = 'updated', $id = 0)
+	{
+		$this->messages['apache'][] = array(
+			'message' => __($message, $this->plugin_name),
+			'type' => $type,
+			'id' => $id
+		);
+	}
 
-	/**
-	 * display messages manager
-	 * @return array push array messages in to partial view
-	 */
-	public function display_messages() {
+	public function display_messages()
+	{
 
 		foreach ($this->messages as $name => $messages) {
 			foreach ($messages as $message) {
-				require plugin_dir_path( dirname( __FILE__ ) ) . 'admin/views/includes/protect-uploads-admin-message.php';
+				return '<div id="message" class="' . $message['type'] . '"><p>' . $message['message'] . '</p></div>';
 			}
 		}
-
 	}
-
 }

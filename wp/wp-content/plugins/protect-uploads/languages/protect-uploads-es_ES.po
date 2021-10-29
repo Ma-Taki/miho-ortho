@@ -165,16 +165,16 @@ msgstr "Ayuda"
 
 #: admin/views/protect-uploads-admin-settings-page.php:76
 msgid ""
-"Protect Uploads Plugin <a href=\"http://www.alticreation.com/en/protect-"
+"Protect Uploads Plugin <a href=\"https://www.alticreation.com/en/protect-"
 "uploads/\" target=\"_blank\">support page</a>."
 msgstr ""
-"Ver la <a href=\"http://www.alticreation.com/en/protect-uploads/\" target="
+"Ver la <a href=\"https://www.alticreation.com/en/protect-uploads/\" target="
 "\"_blank\">pagina de ayuda</a> del plugin."
 
 #: admin/views/protect-uploads-admin-settings-page.php:77
 msgid ""
 "This plugin is compatible with the <span class=\"dashicons dashicons-awards"
-"\"></span> <a href=\"http://www.alticreation.com/en/alti-watermark/\" target="
+"\"></span> <a href=\"https://www.alticreation.com/en/alti-watermark/\" target="
 "\"_blank\">Watermark Plugin</a>."
 msgstr ""
 "Este plugin es compatible con el <span class=\"dashicons dashicons-premios "

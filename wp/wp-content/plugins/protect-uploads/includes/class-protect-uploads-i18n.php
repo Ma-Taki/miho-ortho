@@ -1,8 +1,4 @@
 <?php
-
-/**
- * Define the internationalization functionality
- */
 class Alti_ProtectUploads_i18n {
 
 	/**
