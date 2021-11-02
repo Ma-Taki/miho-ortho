@@ -187,7 +187,7 @@ arrow
 
 .arrow.arrow-w:after{
 	border-top: 1px solid #fff;
-	border-right: 1px solid #fff;	
+	border-right: 1px solid #fff;
 }
 
 .arrow:hover:before,
@@ -793,7 +793,7 @@ bg
 	line-height: 1.6;
 	margin-bottom: 0;
 }
-	
+
 #topTopics dd a{line-height: 1.6;}
 
 #topTopics dd:last-child{border-bottom: 0;}
@@ -1125,7 +1125,7 @@ bg
 
 .faq #pageContent .pageNav li a:hover:after{
     border-top: 1px solid #fff;
-    border-right: 1px solid #fff;	
+    border-right: 1px solid #fff;
 }
 
 .faq #pageContent h2{
@@ -1464,7 +1464,7 @@ bg
 	position: relative;
 }
 
-.staff #pageContent .contentInr .alignright{	
+.staff #pageContent .contentInr .alignright{
     width: 240px;
 	margin: 0 0 24px 24px;
 }
@@ -1536,7 +1536,7 @@ bg
 .contentInr .contactform{
 	width: 800px;
 	margin-left: auto;
-	margin-right: auto;	
+	margin-right: auto;
 }
 
 .contentInr .contactform table{border: 0;}
@@ -1570,7 +1570,7 @@ bg
     padding: 8px;
     border-radius: 6px;
 	width: 100%;
-	-webkit-appearance: none; 
+	-webkit-appearance: none;
 	line-height: 1.6;
 }
 
@@ -1697,7 +1697,7 @@ bg
 	margin-top: 40px;
 	background: #f0f0f0;
 	padding: 24px 24px 40px;
-	
+
 }
 
 /* -------------------
@@ -1916,7 +1916,7 @@ bg
 >> #footer
 ============================ */
 #footer{
-	padding: 80px 0 32px;
+	padding: 80px 0 80px;
 	text-align: center;
 }
 
@@ -1950,21 +1950,23 @@ bg
 }
 
 #page-top a{
-	display: block;
-	width: 80px;
-	height: 80px;
-	background-image: url(images/gotoTop.png);
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: 80px;
+	/* width: 200px;
+	height: 110px; */
+	/* background-image: url(images/gotoTop.png); */
+	/* background-position: center;
+	background-repeat: no-repeat; */
+	/* background-size: 80px; */
 	text-align: center;
-	color: #fff;
-	line-height: 75px;
-	font-size: 12px;
+	/* color: #fff; */
+	line-height: 30px;
+	/* font-size: 12px; */
 	position: relative;
+	padding: 10px;
+  background: #fff;
+	border: 1px solid #000;
 }
 
-#page-top a:before{
+/* #page-top a:before{
 	content: "";
 	position: absolute;
 	top: 20px;
@@ -1978,6 +1980,59 @@ bg
     border-right: 2px solid #fff;
     -webkit-transform: rotate(-45deg);
     transform: rotate(-45deg);
+} */
+
+#page-top img.line-btn {
+	max-width: 70%;
+	width: 100px;
+}
+#page-top .spNone:before,
+#page-top .pcNone:before{
+	content: "";
+	position: absolute;
+	background-size: contain;
+	left: 10px;
+	height: 30px;
+	width: 30px;
+	background-repeat: no-repeat;
+}
+#page-top .spNone.line:before,
+#page-top .pcNone.line:before{
+	background-image: url(images/line_icon.svg);
+}
+#page-top .spNone.form:before,
+#page-top .pcNone.form:before{
+	background-image: url(images/form.svg);
+}
+
+#page-top .line{
+	color: #01b902;
+	font-weight: bold;
+	border: 2px solid #01b902;
+}
+
+#page-top .form{
+	color: #ffffff;
+	font-weight: bold;
+	background-color: #e46e7a;
+	border: 2px solid #e46e7a;
+}
+
+/* PC */
+#page-top .spNone{
+	display: block;
+	width: 270px;
+	height: auto;
+	float: left;
+	border-radius: 8px;
+}
+a.spNone:nth-child(1) {
+    margin-right: 10px;
+}
+
+/* SP */
+.pcNone{
+	display: none;
 }
 
 #page-top a:hover {opacity: .6;}
@@ -2003,7 +2058,7 @@ bg
 		width: 100%;
 		min-width: 100%;
 	}
-	
+
 	/* ----------------------
 	#header
 	---------------------- */
@@ -2014,40 +2069,40 @@ bg
 		height: 32px;
 		background-size: 267px 32px;
 	}
-	
+
 	#header .headLogo p{letter-spacing: 0;}
-	
+
 	/* headNav */
 	#header .headNav li a{font-size: 13px;}
-	
+
 	#header .headNav .ico a{
 		margin-top: 4px;
 		margin-left: 16px;
 	}
-	
+
 	#header .headNav .yoyakuBtn,
 	#header.is-animation .headNav .yoyakuBtn{
 		width: 160px;
 	}
-	
+
 	#header .headNav .yoyakuBtn a{line-height: 32px;}
-	
+
 	#header.is-animation .headNav li a{margin-left: 16px;}
 	#header.is-animation .headNav li:first-child a{margin-left: 0;}
-	
+
 	/* nav */
 	#nav li a,
 	#header.is-animation #nav li a{
 		padding: 0 16px;
 	}
-	
+
 	.home #nav li a{
 		padding: 0 14px !important;
 		font-size: 13px;
 	}
-	
+
 	.home #header .headNav{right: 16px;}
-	
+
 	/* ----------------------
 	#mainImg
 	---------------------- */
@@ -2055,9 +2110,9 @@ bg
 		width: 100%;
 		padding: 0 16px;
 	}
-	
+
 	#mainImg .bxslider li{background-position: right -80px center;}
-	
+
 	/* ----------------------
 	#topContent
 	---------------------- */
@@ -2067,24 +2122,24 @@ bg
 		width: 26%;
 		right: 16px;
 	}
-	
+
 	#topIdea .inr .tooth{display: none;}
-	
+
 	/* #topNav */
 	#topNav .inrBox li a{padding: 24px 16px 72px;}
 	#topNav .inrBox li h2{
 		margin-bottom: 0;
 		padding-top: 0;
 	}
-	
+
 	/* ----------------------
 	#footer
 	---------------------- */
 	#footer li a{margin: 0 8px;}
 	#footer li a:after{margin-left: 16px;}
-	
+
 	.recruit #pageContent .contentInr table{width: 100%;}
-	
+
 }
 
 /* ========================================
@@ -2093,7 +2148,7 @@ bg
 @media screen and (max-width: 800px){
 	/* arrow */
 	.arrow:before, .arrow:after{opacity: 1;}
-	
+
 	/* ----------------------
 	#spMenuBtn + #gNavSP
 	---------------------- */
@@ -2108,11 +2163,11 @@ bg
 		z-index: 999999;
 		background-color: #fff;
 	}
-	
+
 	#spMenuBtn.active{
 		background-color: rgba(228,110,122,.8);
 	}
-	
+
 	#spMenuBtn span {
 		display: block;
 		background: #e46e7a;
@@ -2124,11 +2179,11 @@ bg
 		-webkit-transition: all 0.4s;
 		-moz-transition: all 0.4s;
 	}
-	
+
 	#spMenuBtn.active span{
 		background: #fff;
 	}
-	
+
 	#spMenuBtn p {
 		-webkit-transition: all 0.4s;
 		-moz-transition: all 0.4s;
@@ -2146,7 +2201,7 @@ bg
 		-moz-transform: translateY(10px) rotate(45deg);
 		transform: translateY(10px) rotate(45deg);
 	}
-	
+
 	#spMenuBtn.active span:nth-child(2) { opacity: 0;}
 	#spMenuBtn.active span:nth-child(3) {
 		-webkit-transform: translateY(-10px) rotate(-45deg);
@@ -2164,7 +2219,7 @@ bg
 		z-index: 99999;
 		display: none;
 		top: 0;
-		
+
 	}
 	#gNavSP .inr {
 		text-align: center;
@@ -2176,7 +2231,7 @@ bg
 		-moz-transform: translateY(-50%);
 		transform: translateY(-50%);
 	}
-	
+
 	#gNavSP .inr .description{
 		color: #fff;
 		line-height: 1.4;
@@ -2185,7 +2240,7 @@ bg
 		padding: 16px;
 		font-size: 13px;
 	}
-	
+
 	#gNavSP .inr .logo a{
 		display: block;
 		width: 160px;
@@ -2197,14 +2252,14 @@ bg
 		margin: 16px auto;
 		text-indent: -9999px;
 	}
-	
+
 	#gNavSP ul{overflow: hidden;}
-	
+
 	#gNavSP ul li{
 		width: 50%;
 		float: left;
 	}
-	
+
 	#gNavSP ul li a {
 		color: #fff;
 		text-decoration: none;
@@ -2216,11 +2271,11 @@ bg
 		padding: 16px 0;
 		border-bottom: 1px solid rgba(255,255,255,.2);
 	}
-	
+
 	#gNavSP ul li:nth-child(odd) a{
 		border-right: 1px solid rgba(255,255,255,.2);
 	}
-	
+
 	#gNavSP .inr .btn a{
 		line-height: 40px;
 		width: 80%;
@@ -2230,7 +2285,7 @@ bg
 		border-radius: 24px;
 		color: #e46e7a;
 	}
-	
+
 	/* ----------------------
 	#header
 	---------------------- */
@@ -2242,39 +2297,39 @@ bg
 		z-index: 1;
 		height: 64px;
 	}
-	
+
 	#header.is-animation,
 	.home #header{
 		height: 64px;
 	}
-	
+
 	#header .alignleft p,
 	#header .headNav,
 	#nav{
 		display: none;
 	}
-	
+
 	#header .wrap,
 	#header.is-animation .wrap{
 		margin-bottom: 0;
 		padding: 16px;
 	}
-	
+
 	.home #header{border-bottom: 1px solid #f0f0f0;}
 	.home #header .headLogo{margin-top: 0;}
-	
+
 	/* ----------------------
 	#mainImg
 	---------------------- */
 	#mainImg{margin-top: 64px;}
-	
+
 	#mainImg,
 	#mainImg .bxslider li{
 		height: 420px;
 	}
-	
+
 	#mainImg .bxslider li{background-position: center;}
-	
+
 	#mainImg .textArea{
 		top: auto;
 		bottom: 0;
@@ -2282,9 +2337,9 @@ bg
 		-moz-transform: translateY(0);
 		transform: translateY(0);
 	}
-	
+
 	#mainImg .textArea a span{display: none;}
-	
+
 	/* ----------------------
 	#topContent
 	---------------------- */
@@ -2293,33 +2348,33 @@ bg
 		padding-top: 56px;
 		margin-top: 0;
 	}
-	
+
 	#topIdea h2 img{top: 56px;}
-	
+
 	/* #topTopics */
 	#topTopics.wrap{width: 100%;}
-	
+
 	/* -------------------
 	#pageContent
 	------------------- */
-	
+
 	/* contactform */
 	.contentInr .contactform{width: 100%;}
-	
+
 	/* reservation */
 	.reservation #pageContent .contentInr dl{width: 100%;}
 	.reservation #pageContent .contentInr dt{
 		width: 100%;
 		float: none;
 	}
-	
+
 	.reservation #pageContent .contentInr dd{
 		margin-left: 0;
 		text-align: center;
 		padding: 16px;
 	}
-	
-	
+
+
 	/* ----------------------
 	#footContent
 	---------------------- */
@@ -2330,24 +2385,46 @@ bg
 	#footContent .inrTop .alignleft.calendar div table td{
 		font-size: 11px;
 	}
-	
+
 	/* gotoTop */
 	#page-top{
 		right: 0;
 		bottom: 0;
 	}
-	
+
+	#page-top{
+		width: 100%;
+	}
+	#page-top .spNone{
+		display: none;
+	}
+	#page-top .pcNone{
+		display: block;
+		width: 50%;
+		height: auto;
+		float: left;
+		line-height: 20px;
+	}
+
+	#page-top .pcNone span{
+		display: block;
+		padding-left:25px;
+	}
+	#page-top .pcNone:before{
+		top: 15px;
+	}
+
 	.flow #pageContent .flowInr .detail h3{
 		padding-left: 0;
 		line-height: 1.4;
 	}
-	
+
 	.children #pageContent .contentInr img,
 	.before-after #pageContent .contentInr img,
 	#pageContent .faqBox dd img{
 		width: 88%;
 	}
-	
+
 	.dentifrice #pageContent .contentInr .messageBox .dentifrice05a{top: 56px;}
 	.dentifrice #pageContent .contentInr .dentifriceInr2img{width: 320px;}
 }
@@ -2359,17 +2436,17 @@ bg
 	body, header, footer, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td, hr, a{
 		font-size: 14px;
 	}
-	
+
 	.spNone{display: none;}
 	.pcNone{display: block;}
-	
+
 	.alignleft,
 	.alignright{
 		width: 100% !important;
 		float: none;
 		display: block;
 	}
-	
+
 	/* ----------------------
 	#header
 	---------------------- */
@@ -2377,15 +2454,15 @@ bg
 	#header.is-animation .wrap{
 		padding: 20px 16px;
 	}
-	
+
 	#header .headLogo h1 a,
 	#header.is-animation .headLogo h1 a{
 		width: 200px;
 		height: 24px;
 		background-size: 200px 24px;
 	}
-	
-	
+
+
 	/* ----------------------
 	#mainImg
 	---------------------- */
@@ -2393,7 +2470,7 @@ bg
 	#mainImg .bxslider li{
 		height: 240px;
 	}
-	
+
 	/* ----------------------
 	#topContent
 	---------------------- */
@@ -2402,9 +2479,9 @@ bg
 		padding-top: 24px;
 		padding-bottom: 40px;
 	}
-	
+
 	#topIdea .alignleft h1{font-size: 20px;}
-	
+
 	#topIdea h2{
 		color: #e46e7a;
 		font-size: 24px;
@@ -2412,42 +2489,42 @@ bg
 		text-align: center;
 		margin-bottom: 16px;
 	}
-	
+
 	#topIdea .inr .ideaImg{width: 100%;}
-	
+
 	#topIdea .alignleft img{
 		width: 70%;
 		margin: 0 auto 16px;
 	}
-	
+
 	#topIdea h1{
 		text-align: center;
 		font-size: 18px;
 		letter-spacing: 0.05em;
 		margin-bottom: 8px;
 	}
-	
+
 	#topIdea h1:after{margin: 0 auto 8px;}
 	#topIdea .alignright{padding: 0 16px;}
-	
+
 	/* topNav */
 	#topNav {padding: 8px 0;}
 	#topNav .inrBox li{
 		width: 100%;
 		border-right: 0;
 	}
-	
+
 	#topNav .inrBox li:nth-last-child(-n+3){border-bottom: 2px dotted #fff;}
 	#topNav .inrBox li:last-child{border-bottom: 0;}
 	#topNav .inrBox li .btn{width: 72%;}
-	
+
 	/* topTopics */
 	#topTopics{padding-bottom: 56px;}
 	#topTopics h1{
 		margin: 16px 0 24px;
 		font-size: 20px;
 	}
-	
+
 	#topTopics dt{
 		float: none;
 		padding-left: 8px;
@@ -2455,56 +2532,56 @@ bg
 		margin-bottom: 0;
 		font-size: 12px;
 	}
-	
+
 	#topTopics dd{
 		padding-left: 8px;
 		padding-right: 8px;
 		margin-bottom: 16px;
 		padding-bottom: 16px;
 	}
-	
+
 	/* -------------------
 	#pageContent
 	------------------- */
 	#pageContent section .headArea{padding: 40px 0 24px;}
 	#pageContent section .headArea h1{font-size: 18px;}
 	#pageContent section .headArea h1:after{width: 64%;}
-	
+
 	/* contactform */
 	.contentInr .contactform table th,
 	.contentInr .contactform table td{display: block;}
-	
+
 	.contentInr .contactform table th{
 		padding: 16px 16px 0;
 		width: 100%;
 	}
-	
+
 	.contentInr .contactform table td{padding: 8px 8px 0;}
 	.contentInr .contactform table td p{width: 50%;}
-	
+
 	.contentInr .contactform input,
 	.contentInr .contactform textarea{font-size: 16px;}
-	
+
 	.contentInr .contactform input[type="button"],
 	.contentInr .contactform input[type="submit"]{
 		width: 100%;
 		margin: 16px 0 0;
 	}
-	
-	/* reservation */	
-	.reservation #pageContent .contentInr .inrBox li{width: 100%;}	
+
+	/* reservation */
+	.reservation #pageContent .contentInr .inrBox li{width: 100%;}
 	.reservation #pageContent .contentInr .inrBox li h2{margin-top: 32px;}
 	.reservation #pageContent .contentInr p{text-align: left !important;}
-	
+
 	.reservation #pageContent .contentInr .icoForm p,
 	.reservation #pageContent .contentInr .icoLine p,
 	.reservation #pageContent .contentInr .icoTEL p{
 		text-align: center !important;
 	}
-	
+
 	.reservation #pageContent .contentInr .contactform{padding: 16px 8px 8px;}
-	
-	
+
+
 	/* -------------------
 	#footContent
 	------------------- */
@@ -2513,14 +2590,14 @@ bg
 		font-size: 16px;
 		line-height: 1.4;
 	}
-	
+
 	#footContent h2 a{
 		font-size: 16px;
 		line-height: 1.4;
 	}
-	
+
 	#footContent .inr{padding-top: 24px;}
-	
+
 	#footContent .inrTop .alignright,
 	#footContent .inrTop .alignleft,
 	#footContent .inrBtm .alignright,
@@ -2530,45 +2607,45 @@ bg
 		display: block;
 		margin-bottom: 24px;
 	}
-	
+
 	#footContent .inrTop dt{
 		width: 104px;
 		font-size: 11px;
 	}
-	
+
 	#footContent .inrTop dd{
 		padding: 4px 8px 4px 120px;
 		font-size: 13px;
 	}
-	
+
 	#footContent .inrTop .alignleft{padding-right: 0;}
 	#footContent .inrTop .alignleft.calendar{padding-top: 24px;}
 	#footContent .inrBtm .alignright{padding: 24px 0 0;}
 	#footContent .inrBtm li h3{font-size: 16px;}
-	
+
 	/* footer */
 	#footer{padding-top: 40px;}
 	#footer p{padding-top: 0;}
 	.footNav{display: none;}
-	
+
 	.children #pageContent .contentInr img{width: 100%;}
-	
+
 	.flow #pageContent .contentInr img{
 		width: 280px !important;
 		margin: 0 auto;
 	}
-	
+
 	.flow #pageContent .contentInr .yoyakuBtn{width: 100%;}
 	.yoyakuBtn a{
 		line-height: 1.4;
 		padding: 8px 40px;
 	}
-	
+
 	.flow #pageContent .flowInr h3,
 	.flow #pageContent .flowInr .detail{
 		padding-left: 0;
 	}
-	
+
 	.flow #pageContent .flowInr .number{height: 40px;}
 	.flow #pageContent .flowInr .number p br{display: none;}
 	.flow #pageContent .flowInr .number:after{content: none;}
@@ -2576,15 +2653,15 @@ bg
 	.flow #pageContent .flowInr h3{margin-bottom: 8px;}
 	#pageContent h3{margin-top: 16px;}
 	#pageContent{padding-bottom: 56px;}
-	
+
 	.clinic #pageContent .contentInr .fs0 li{width: 100%;}
-	
+
 	.staff #pageContent .contentInr .alignright{
 		margin-left: 0;
 		margin-bottom: 16px;
 		padding-bottom: 8px;
 	}
-	
+
 	.cost #pageContent .contentInr dt{
 		float: none;
 		font-size: 16px;
@@ -2594,52 +2671,52 @@ bg
 		line-height: 1.4;
 		padding-top: 0;
 	}
-	
+
 	.staff #pageContent .contentInr .alignright img{
 		width: 80%;
 		margin: auto;
 		display: block;
 	}
-	
+
 	.cost #pageContent .contentInr .inrBox li{width: 100%;}
 	.cost #pageContent h3{margin-bottom: 8px;}
 	.cost #pageContent .contentInr .inrBox .costBox p{font-size: 13px;}
-	
+
 	.service #pageContent .contentInr p,
 	.recruit #pageContent .contentInr p{
 		text-align: left !important;
 	}
-	
+
 	.dentifrice #pageContent .contentInr .inrBox li{width: 100%;}
 	.dentifrice #pageContent .contentInr .messageBox p{
 		text-align: left;
 		font-size: 13px;
 	}
-	
+
 	.dentifrice #pageContent .contentInr .inrBox h3{font-size: 16px;}
 	.recruit #pageContent .contentInr table tr{border-bottom: 0;}
 	.recruit #pageContent .contentInr table th{
 		width: 100%;
 		display: block;
 	}
-	
+
 	.recruit #pageContent .contentInr table td{
 		width: 100%;
 		display: block;
 	}
-	
+
 	#pageContent .faqBox{padding: 0;}
 	#pageContent .faqBox dt{font-size: 14px;}
 	.faq #pageContent h2{
 		padding-top: 80px;
 		margin-top: -48px;
 	}
-	
+
 	#pageContent .post_thumbnail{
 		margin-top: 56px;
 		height: 160px;
 	}
-	
+
 	.flow #pageContent .contentInr h2{margin-bottom: 16px;}
 	#pageContent h2{
 		padding-bottom: 8px;
@@ -2647,14 +2724,14 @@ bg
 		text-indent: -28px;
 		margin-bottom: 8px;
 	}
-	
+
 	#pageContent h3{line-height: 1.6;}
 	.children #pageContent .contentInr .yoyakuBtn{width: 100%;}
 	.mouthpiece #pageContent .contentInr .inrBox{
 		width: 100%;
 		margin-top: 24px;
 	}
-	
+
 	.flow #pageContent .flowInr img.alignright{margin-left: 0;}
 	.flow #pageContent .flowInr img.alignleft{margin-right: 0;}
 	.staff #pageContent .contentInr .messageBox{padding: 24px;}
@@ -2662,16 +2739,16 @@ bg
 	.speed #pageContent .contentInr img{
 		width: 100%;
 	}
-	
+
 	.cost #pageContent .contentInr .inr{
 		padding-left: 0;
 		padding-right: 0;
 	}
-	
-	.cost #pageContent .contentInr .fs0 li{width: 100%;}	
+
+	.cost #pageContent .contentInr .fs0 li{width: 100%;}
 	.cost #pageContent .contentInr .fs0 .inrBox{height: auto;}
 	.cost #pageContent .contentInr .childBox img{margin-left: 0;}
-	
+
 	.cost #pageContent .contentInr .inr .costArrow{
 		right: 16px;
 		top: 100px;
@@ -2679,5 +2756,3 @@ bg
 		height: 80px;
 	}
 }
-
-

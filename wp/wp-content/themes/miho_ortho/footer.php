@@ -122,7 +122,20 @@
 
 
 <!-- page-top -->
-<p id="page-top"><a href="#wrap">TOP</a></p>
+<div id="page-top">
+		<a class="spNone line" href="https://line.me/R/ti/p/%40hmf7692n" target="_blank" rel="noopener">
+    	<span style="padding-left:25px">LINEで予約・相談する</span>
+		</a>
+		<a class="spNone form" href="/reservation" target="_blank" rel="noopener">
+    	<span style="padding-left:25px">フォームで予約・相談する</span>
+		</a>
+		<a class="pcNone line" href="https://line.me/R/ti/p/%40hmf7692n" target="_blank" rel="noopener">
+			<span>LINEで<br>予約・相談する</span>
+		</a>
+		<a class="pcNone form" href="/reservation" target="_blank" rel="noopener">
+			<span>フォームで<br>予約・相談する</span>
+		</a>
+</div>
 <!-- /page-top -->
 
 <!--

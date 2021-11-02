@@ -38,7 +38,7 @@ $(function(){
 
 // pagetop
 $(function() {
-    var topBtn = $('#page-top');    
+    var topBtn = $('#page-top');
     topBtn.hide();
     //スクロールが100に達したらボタン表示
     $(window).scroll(function () {
@@ -49,12 +49,12 @@ $(function() {
         }
     });
     //スクロールしてトップ
-    topBtn.click(function () {
-        $('body,html').animate({
-            scrollTop: 0
-        }, 1500);
-        return false;
-    });
+    // topBtn.click(function () {
+    //     $('body,html').animate({
+    //         scrollTop: 0
+    //     }, 1500);
+    //     return false;
+    // });
 });
 
 // ページ内リンク
@@ -79,7 +79,7 @@ $(function(){
 		$('body,html').animate({scrollTop:position}, speed, 'swing');
 		return false;
 	});
-	
+
 	$("#spMenuBtn, #gNavSP a").click( function(){
 		$("#gNavSP").slideToggle(300);
 		$("#gNavSP").toggleClass("activeNav");
@@ -96,4 +96,4 @@ $('.bxslider').bxSlider({
 	pager: false,
 	controls: false,
 });
-});	
+});
