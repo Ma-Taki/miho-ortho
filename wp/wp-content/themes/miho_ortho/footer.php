@@ -135,6 +135,9 @@
 		<a class="pcNone form" href="/reservation" target="_blank" rel="noopener">
 			<span>フォームで<br>予約・相談する</span>
 		</a>
+		<a class="pcNone tel" href="tel:0798-36-6480" target="_blank" rel="noopener">
+			<span>電話で<br>予約・相談する</span>
+		</a>
 </div>
 <!-- /page-top -->
 

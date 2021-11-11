@@ -9,8 +9,8 @@
 <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
 <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/font.css" type="text/css" />
 <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/reset.css" type="text/css" />
-<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/jquery.bxslider.min.css" type="text/css" />	
-<link rel="stylesheet" type="text/css" href="<?php bloginfo('stylesheet_url'); echo '?' . filemtime( get_stylesheet_directory() . '/style.css'); ?>">	
+<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/jquery.bxslider.min.css" type="text/css" />
+<link rel="stylesheet" type="text/css" href="<?php bloginfo('stylesheet_url'); echo '?' . filemtime( get_stylesheet_directory() . '/style.css'); ?>">
 <script src="<?php bloginfo('template_url');?>/js/jquery-1.11.2.min.js"></script>
 <script src="<?php bloginfo('template_url');?>/js/jquery.bxslider.min.js"></script>
 <script src="<?php bloginfo('template_url');?>/js/jquery.matchHeight-min.js"></script>
@@ -30,7 +30,7 @@
 <span></span>
 </p>
 </a>
-	
+
 <div id="gNavSP">
 	<div class="inr">
 		<p class="logo"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">美帆矯正歯科クリニック</a></p>
@@ -47,22 +47,18 @@
 <header id="header">
 	<div class="wrap">
 		<div class="alignleft headLogo">
-			<p><?php bloginfo( 'description' ); ?></p>
+			<!-- <p><?php bloginfo( 'description' ); ?></p> -->
+			<p>阪急「夙川駅」より徒歩1分。<br>女性院長による矯正歯科クリニック</p>
 			<h1><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
 		</div>
-		
+
 		<div class="alignright headNav fs0">
 			<?php wp_nav_menu( array('menu' => 'headNav' )); ?>
 		</div>
 	</div>
-	
+
 	<nav id="nav" class="fs0">
 		<?php wp_nav_menu( array('menu' => 'gNav' )); ?>
 	</nav>
 </header>
 <!-- /#header -->
-
-
-
-
-

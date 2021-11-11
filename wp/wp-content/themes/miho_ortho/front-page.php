@@ -15,7 +15,7 @@ Template Name: トップページ
 	<?php $my_query = new WP_Query( $args ); ?>
 	<ul class="bxslider">
 		<?php while ( $my_query->have_posts() ) : $my_query->the_post(); ?>
-			<?php 
+			<?php
 			// SCF::get_post_meta($post->ID, '設定した名前', 画像サイズ)
 			 $img = get_post_meta($post->ID, 'mainImg', true);
 			?>
@@ -23,7 +23,7 @@ Template Name: トップページ
 		<?php endwhile; ?>
 	</ul>
 	<?php wp_reset_postdata(); ?>
-	
+
 	<div class="textArea">
 		<p class="spNone">
 			<?php
@@ -31,7 +31,7 @@ Template Name: トップページ
 				echo wp_get_attachment_image( $cf_sample , 'full' );
 			?>
 		</p>
-		
+
 		<p class="pcNone">
 			<?php
 				$cf_sample = SCF::get('spImg');
@@ -45,10 +45,10 @@ Template Name: トップページ
 
 <!-- #topContent -->
 <div id="topContent">
-	
+
 <!-- #topIdea -->
 <div id="topIdea" class="wrap">
-	<?php 
+	<?php
 		$img = get_post_meta($post->ID, 'ideaTtl', true);
 	?>
 	<h2 class="spNone"><img src="<?php echo wp_get_attachment_url($img) ?>" alt="女性院長による細やかな視点で、健康で魅力的な笑顔をあなたにご提案します。"></h2>
@@ -71,8 +71,14 @@ Template Name: トップページ
 				echo wp_get_attachment_image( $cf_sample , 'full' );
 			?>
 		</p>
-		
-		<div class="alignleft">
+
+<div style="margin:50px auto;">
+		<p class="alignleft" style="width:58%;">
+			当院では、矯正歯科専門クリニックとして様々な治療方法を患者さまの希望に沿いながらご提案致します。<br>
+			取り外しの透明な矯正装置（アライナー・インビザライン）についてもご相談ください。</p>
+			<img  class="alignright" style="width:38%;margin:0 2%; padding:0" src="/wp/wp-content/uploads/2021/11/アライナー写真.jpg">
+</div>
+		<div class="alignleft" style="clear:both;">
 			<?php
 			$cf_sample = SCF::get('director');
 			echo wp_get_attachment_image( $cf_sample , 'full' );
@@ -80,7 +86,7 @@ Template Name: トップページ
 			<p class="name"><span>歯科医師</span>廣瀬 美帆</p>
 <!--			<p class="btn arrow"><a href="<?php echo esc_url( home_url( '/' ) ); ?>/clinic/">院内案内</a></p>-->
 		</div>
-		
+
 		<div class="alignright">
 			<h1>ごあいさつ</h1>
 			<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
@@ -88,19 +94,19 @@ Template Name: トップページ
 			<?php endwhile; endif; ?>
 		</div>
 	</div>
-	
+
 </div>
 <!-- /#topIdea -->
 
 
 <!-- #topNav -->
 <div id="topNav" class="bgTooth">
-	<div class="wrap fs0">		
+	<div class="wrap fs0">
 		<ul class="matchHeight inrBox">
 		<?php
 			$posts = new WP_Query( array(
 					'post_type' => 'topNav',
-					'posts_per_page' => 6,
+					'posts_per_page' => 7,
 					'orderby' =>  'ID',
 					'order' =>  'ASC'
 				)
@@ -115,19 +121,19 @@ Template Name: トップページ
 					}
 					?>
 				">
-					<?php 
+					<?php
 					 $img = get_post_meta($post->ID, 'topNav_img', true);
 					?>
 					<img src="<?php echo wp_get_attachment_url($img) ?>">
-					
+
 					<h2><?php the_title(); ?></h2>
-					
+
 					<p><?php
 						$cf_sample = SCF::get('topNav_text');
 						echo nl2br($cf_sample);
 						?>
 					</p>
-					
+
 					<p class="btn arrow arrow-w">詳しく見る</p>
 				</a>
 			</li>
@@ -160,7 +166,7 @@ Template Name: トップページ
 		wp_reset_postdata(); // 直前のクエリを復元する
 		?>
 	</dl>
-	
+
 <!--	<p class="btn arrow"><a href="#">お知らせ一覧へ</a></p>-->
 </section>
 <!-- /#topics -->
@@ -179,7 +185,7 @@ Template Name: トップページ
 </div>
 <!-- /#topBnr -->
 
-	
-	
+
+
 </div>
 <?php get_footer(); ?>

@@ -115,6 +115,7 @@ ico
 
 .ico.map a:before{background-image: url(images/icoMap.png);}
 .ico.mail a:before{background-image: url(images/icoContact.png);}
+.ico.tel a:before{background-image: url(images/icoTel.png);}
 
 /* ----------------------
 btn
@@ -265,7 +266,7 @@ bg
 ============================ */
 #header{
 	width: 100%;
-	height: 144px;
+	height: 155px;
 	transition: .3s;
 	border-bottom: 1px solid #f0f0f0;
 }
@@ -280,19 +281,19 @@ bg
 
 #header .wrap h1 a{
 	display: block;
-	width: 400px;
-	height: 48px;
+	width: 350px;
+	height: 42px;
 	text-indent: -9999px;
 	background-image: url(images/headLogo.png);
 	background-repeat: no-repeat;
 	background-position: center;
-	background-size: 400px 48px;
+	background-size: 350px 42px;
 }
 
 #header .wrap p{
 	font-size: 12px;
 	margin-bottom: 8px;
-	line-height: 1;
+  line-height: 1.25em;
 }
 
 /* .headNav */
@@ -304,7 +305,7 @@ bg
 #header .headNav li:first-child a{margin-left: 0;}
 #header .headNav .ico a{margin-top: 8px;}
 #header .headNav .ico a:hover{color: #e46e7a;}
-#header .headNav .yoyakuBtn{width: 240px;}
+#header .headNav .yoyakuBtn{width: 200px;}
 
 /* nav */
 #nav{text-align: center;}
@@ -394,15 +395,15 @@ bg
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 88px;
+	height: 110px;
 	background: #fff;
 	z-index: 1;
 	border-bottom: 1px solid #f0f0f0;
 }
 
 #header.is-animation .wrap{
-	margin: 0 auto 8px;
-	padding-top: 8px;
+	margin: 0 auto 10px;
+	padding-top: 10px;
 	width: 88%;
 	min-width: 1000px;
 }
@@ -423,7 +424,7 @@ bg
 #header.is-animation .headNav{
 	position: static;
 	padding-right: 0;
-	margin-top: 8px;
+	margin-top: 10px;
 }
 
 #header.is-animation .headNav li a{font-size: 13px;}
@@ -2005,6 +2006,10 @@ bg
 	background-image: url(images/form.svg);
 }
 
+#page-top .pcNone.tel:before{
+	background-image: url(images/icoTel.png);
+}
+
 #page-top .line{
 	color: #01b902;
 	font-weight: bold;
@@ -2016,6 +2021,15 @@ bg
 	font-weight: bold;
 	background-color: #e46e7a;
 	border: 2px solid #e46e7a;
+}
+
+#page-top .tel{
+	color: #e46e7a;
+	font-weight: bold;
+	background-color: #ffffff;
+	border: 2px solid #e46e7a;
+	border-top:0px;
+	width: 100% !important;
 }
 
 /* PC */
@@ -2062,12 +2076,12 @@ a.spNone:nth-child(1) {
 	/* ----------------------
 	#header
 	---------------------- */
-	#header{height: 120px;}
+	#header{height: 140px;}
 	#header .wrap{margin-bottom: 16px;}
 	#header .headLogo h1 a{
-		width: 267px;
-		height: 32px;
-		background-size: 267px 32px;
+		width: 245px;
+		height: 29px;
+		background-size: 245px 29px;
 	}
 
 	#header .headLogo p{letter-spacing: 0;}
@@ -2082,7 +2096,7 @@ a.spNone:nth-child(1) {
 
 	#header .headNav .yoyakuBtn,
 	#header.is-animation .headNav .yoyakuBtn{
-		width: 160px;
+		width: 130px;
 	}
 
 	#header .headNav .yoyakuBtn a{line-height: 32px;}
@@ -2112,6 +2126,10 @@ a.spNone:nth-child(1) {
 	}
 
 	#mainImg .bxslider li{background-position: right -80px center;}
+
+	#mainImg .textArea a span{
+		bottom: -40px;
+	}
 
 	/* ----------------------
 	#topContent
