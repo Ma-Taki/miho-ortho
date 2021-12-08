@@ -48,6 +48,25 @@ Template Name: トップページ
 
 <!-- #topIdea -->
 <div id="topIdea" class="wrap">
+	<div class="spNone" style="
+    position: absolute;
+    background: rgba(255,255,255,0.75);
+    padding: 20px;
+    font-weight: bold;
+    color: #e46e7a;
+">
+    <a class="Link" href="https://www.instagram.com/miho_ortho/" target="_blank" style="
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+"></a>
+    <img src="wp/wp-content/themes/miho_ortho/images/instagram_logo.png" style="width: 28px;vertical-align: middle;">
+    <span style="
+    margin-left: 8px;
+">instagramはこちら</span></div>
 	<?php
 		$img = get_post_meta($post->ID, 'ideaTtl', true);
 	?>
@@ -75,7 +94,7 @@ Template Name: トップページ
 <div style="margin:50px auto;">
 		<p class="alignleft" style="width:58%;">
 			当院では、矯正歯科専門クリニックとして様々な治療方法を患者さまの希望に沿いながらご提案致します。<br>
-			取り外しの透明な矯正装置（アライナー・インビザライン）についてもご相談ください。</p>
+			表のブラケット矯正治療をはじめ、裏からの矯正装置（リンガル）取り外しの透明な矯正装置（アライナー・インビザライン）による治療を行っています。患者さまのご希望に出来るだけ添えるよう治療を考えております。ぜひご相談ください。</p>
 			<img  class="alignright" style="width:38%;margin:0 2%; padding:0" src="/wp/wp-content/uploads/2021/11/アライナー写真.jpg">
 </div>
 		<div class="alignleft" style="clear:both;">
@@ -107,7 +126,7 @@ Template Name: トップページ
 			$posts = new WP_Query( array(
 					'post_type' => 'topNav',
 					'posts_per_page' => 7,
-					'orderby' =>  'ID',
+					'orderby' =>  'menu_order',
 					'order' =>  'ASC'
 				)
 			);

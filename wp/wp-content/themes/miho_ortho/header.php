@@ -39,6 +39,9 @@
 			<?php wp_nav_menu( array('menu' => 'spNav' )); ?>
 		</div>
 		<p class="btn"><a href="<?php echo esc_url( home_url( '/' ) ); ?>/reservation/">初診相談予約</a></p>
+		<a href="https://www.instagram.com/miho_ortho/" target="_blank">
+			<img src="wp/wp-content/themes/miho_ortho/images/instagram_logo_white.png" style="width:30px">
+		</a>
 	</div>
 </div>
 <!-- /spNavBtn -->
